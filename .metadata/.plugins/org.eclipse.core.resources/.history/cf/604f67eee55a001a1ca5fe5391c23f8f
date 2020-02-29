@@ -1,0 +1,7 @@
+package Levels;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+public class Level1 extends JPanel {
+
+}
