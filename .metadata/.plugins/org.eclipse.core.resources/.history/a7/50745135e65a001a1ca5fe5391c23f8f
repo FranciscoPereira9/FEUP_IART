@@ -1,9 +1,0 @@
-package Levels;
-import javax.swing.JPanel;
-
-public class Level1 extends JPanel {
-	
-	public Level1() {
-		
-	}
-}
