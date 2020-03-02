@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 public class Level2 extends JPanel {
 	
 	public Level2() {
-		
+	
 	}
 	
 	public void drawLevel2(Graphics g) {
@@ -47,8 +47,19 @@ public class Level2 extends JPanel {
 		g.fillRect(500, 400, 95, 95);
 	}
 	
-	public int getNumberPieces() {
+	public int getFBlocksNumber() {
 		final int number = 2;
 		return number;
 	}
+	public int getNumberRows() {
+		final int numRows = 5;
+		return numRows;
+	}
+	public int getNumberCols() {
+		final int numCols = 4;
+		return numCols;
+	}
+
+	
+	
 }

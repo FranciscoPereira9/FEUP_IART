@@ -8,10 +8,9 @@ public class Main {
 		obj.setBounds(10, 10, 700, 600);
 		Game game = new Game();
 		obj.setTitle("Folding Blocks");
-		obj.setResizable(false);
-		obj.setVisible(true);
+		obj.setResizable(false);	
 		obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		obj.add(game);
+		obj.setVisible(true);
 	}
-
 }
