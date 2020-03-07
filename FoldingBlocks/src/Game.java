@@ -9,7 +9,6 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import Levels.Level;
 import java.util.HashMap;
 
 
@@ -17,7 +16,7 @@ import java.util.HashMap;
 public class Game extends JPanel implements KeyListener, ActionListener {
 	
 	private Timer timer;
-	private int num_level = 3;
+	private int num_level = 1;
 	private Level l = new Level(num_level);
 	private int numberOfPlays = 0;
 	private int numberOfSquaresH = 1;
