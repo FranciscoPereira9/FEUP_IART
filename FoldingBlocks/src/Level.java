@@ -14,6 +14,7 @@ public class Level extends JPanel{
 	public Level(int num_level) {
 		this.num_level = num_level;
 		initializeLevel(this.num_level);
+		
 	}
 	
 	public void initializeLevel(int num_level) {
@@ -107,10 +108,21 @@ public class Level extends JPanel{
 	}
 
 	public int getLevel_sizeY() {
-		return board_sizeY;
+		return this.board_sizeY;
 	}
 	public int getLevel_sizeX() {
-		return board_sizeX;
+		return this.board_sizeX;
+	}
+	public int[][] get_board() {
+		return this.board;
+	}
+	
+	public void update_board(int[][] mat){
+		this.board=mat;
+	}
+	
+	public void zeros() {
+		
 	}
 	
 }
