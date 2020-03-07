@@ -5,7 +5,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		JFrame obj = new JFrame();
-		obj.setBounds(10, 10, 700, 600);
+		obj.setBounds(10, 10, 800, 700);
 		Game game = new Game();
 		obj.setTitle("Folding Blocks");
 		obj.setResizable(false);	
