@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class Level extends JPanel{
 	private int num_level;
 	private int[][] board;
@@ -113,4 +114,17 @@ public class Level extends JPanel{
 		return board_sizeX;
 	}
 	
+	public int[][] get_board() {
+		return this.board;
+	}
+
+	public void update_board(int[][] mat){
+		this.board=mat;
+	}
+
+	public void zeros() {
+
+	}
+
 }
+
