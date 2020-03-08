@@ -27,7 +27,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 	public boolean up;
 	public boolean down;
 	public Logic functional;
-	
+  
 	public Game() {
 
 		addKeyListener(this);
