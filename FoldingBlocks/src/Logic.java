@@ -184,8 +184,7 @@ public int[][] fold(int[][] mat, int move, int ID_block) {
     }
     
     mat=mat_aux;
-    this.print2D(mat);
-    System.out.println("Nunca chega aqui ahabahbck ");
+   //this.print2D(mat);
     return mat;
 
 	}
