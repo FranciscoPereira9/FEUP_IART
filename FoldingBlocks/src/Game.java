@@ -37,9 +37,9 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		timer.start();
 		
 		this.up=false;this.down=false;this.right=false;this.left=false;
-		this.move=1;
+		this.move=0;
 		this.ID_block=1;
-		this.num_level=4;
+		this.num_level=6;
 		this.functional= new Logic();
 		l = new Level(num_level);
 		this.mat=l.get_board();
@@ -51,6 +51,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		g.setColor(Color.black);
 		g.fillRect(1,1,792,692);
 		this.l.drawLevel(g);
+		
 		
 	}
 	
@@ -64,55 +65,53 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		
+		this.mat=l.get_board();
+		int[][] board;
+		
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			//Do some movement;
 			this.right = true;
-			this.move=4;
-			this.functional.fold(this.mat, this.move, this.ID_block);
-			this.l.update_board(this.mat);
+			this.move=2;
 			
 		}
 		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
 			//Do some movement;
 			this.left = true;
-			this.move=3;
-			this.functional.fold(this.mat, this.move, this.ID_block);
-			this.l.update_board(this.mat);
+			this.move=1;
 		}
 		if(e.getKeyCode() == KeyEvent.VK_UP) {
 			//Do some movement;
 			this.up = true;
-			this.move=1;
-			this.functional.fold(this.mat, this.move, this.ID_block);
-			this.l.update_board(this.mat);
+			this.move=3;
 		}
 		if(e.getKeyCode() == KeyEvent.VK_DOWN) {
 			//Do some movement;
 			this.down = true;
-			this.move=2;
-			this.functional.fold(this.mat, this.move, this.ID_block);
-			this.l.update_board(this.mat);
+			this.move=4;
 		}
 		
 		
 		
 		//Identificar os blocos a jogar
+		if(e.getKeyCode() == KeyEvent.VK_1) {
+			this.ID_block = 1;
+		}
 		if(e.getKeyCode() == KeyEvent.VK_2) {
-			//Do some movement;
 			this.ID_block = 2;
 		}
 		if(e.getKeyCode() == KeyEvent.VK_3) {
-			//Do some movement;
 			this.ID_block = 3;
 		}
 		if(e.getKeyCode() == KeyEvent.VK_4) {
-			//Do some movement;
 			this.ID_block = 4;
 		}
 		if(e.getKeyCode() == KeyEvent.VK_5) {
-			//Do some movement;
 			this.ID_block = 5;
 		}
+		
+		//Fazer movimento e dar update ao board
+		board=this.functional.fold(this.mat, this.move, this.ID_block);
+		this.l.update_board(board);
 	}
 
 	@Override

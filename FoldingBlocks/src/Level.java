@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class Level extends JPanel{
 	private int num_level;
 	private int[][] board;
@@ -14,7 +15,6 @@ public class Level extends JPanel{
 	public Level(int num_level) {
 		this.num_level = num_level;
 		initializeLevel(this.num_level);
-		
 	}
 	
 	public void initializeLevel(int num_level) {
@@ -61,8 +61,8 @@ public class Level extends JPanel{
 			break;
 		}
 		
-		board_sizeX = this.board.length;
-		board_sizeY = this.board[0].length;
+		board_sizeY = this.board.length;
+		board_sizeX = this.board[0].length;
 	}
 	public void drawLevel(Graphics g) {
 		int xS = 650/this.getLevel_sizeX();
@@ -77,7 +77,7 @@ public class Level extends JPanel{
 			for(int j=0; j<this.getLevel_sizeY(); j++) 
 			{		
 					//draw pieces
-					g.setColor(chooseColor(board[i][j]));
+					g.setColor(chooseColor(board[j][i]));
 					g.fillRect(70+i*xS, 50+j*yS, dimensionX, dimensionY);
 			}
 		}
@@ -108,21 +108,23 @@ public class Level extends JPanel{
 	}
 
 	public int getLevel_sizeY() {
-		return this.board_sizeY;
+		return board_sizeY;
 	}
 	public int getLevel_sizeX() {
-		return this.board_sizeX;
+		return board_sizeX;
 	}
+	
 	public int[][] get_board() {
 		return this.board;
 	}
-	
+
 	public void update_board(int[][] mat){
 		this.board=mat;
 	}
-	
+
 	public void zeros() {
-		
+
 	}
-	
+
 }
+

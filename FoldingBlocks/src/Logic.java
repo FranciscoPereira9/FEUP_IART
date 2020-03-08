@@ -111,99 +111,105 @@ public class Logic {
               
         }
         
-        int axis[]= {x_axis,y_axis};
+        int axis[]= {x_axis,y_axis}; //0 - eixo vertical; 1 - eixo horizontal
         return axis;
 
 	}
 	
-	public void fold(int[][] mat, int move, int ID_block) {
+public int[][] fold(int[][] mat, int move, int ID_block) {
 		
 		int axis[]=this.get_axis(mat, move, ID_block);
 		int dist;
 		int bloco_novo;
-		int mat_aux[][]=mat;
+		int mat_aux[][]= Logic.cloneArray(mat);
 		
-		switch(move){
-			case 1: //left
-			
-			  for(int x=0; x<mat_aux.length; x++)
-	          { 
-	                 // Loop through all columns of current row 
-	                 for(int y=0; y<mat_aux[x].length; y++)
-	                 {
-	                	 if(mat_aux[x][y]==ID_block) 
-	          			  {
-	                		 dist=(y-axis[1])+1;
-	                		 bloco_novo=axis[1]-dist;
-	                		 if(bloco_novo < 0 || bloco_novo >= mat_aux[x].length || mat_aux[x][bloco_novo] != 0) return;
-	                		 mat_aux[x][bloco_novo]=ID_block;
-	          			  }
-	                 }
-	          }
-			  mat=mat_aux;
-			  break;
-			  
-			case 2: //right
-				for(int x=0; x<mat_aux.length; x++)
-		          { 
-		                 // Loop through all columns of current row 
-		                 for(int y=0; y<mat_aux[x].length; y++)
-		                 {
-		                	 if(mat_aux[x][y]==ID_block) 
-		          			  {
-		                		 dist=(axis[1]-y)+1;
-		                		 bloco_novo=axis[1]+dist;
-		                		 if(bloco_novo < 0 || bloco_novo >= mat_aux[x].length || mat_aux[x][bloco_novo] != 0) return;
-		                		 mat_aux[x][bloco_novo]=ID_block;
-		          			  }
-		                 }
-		          }
-				mat=mat_aux;
-				
-			break;
-			
-			case 3: //up
-				for(int x=0; x<mat_aux.length; x++)
-		          { 
-		                 // Loop through all columns of current row 
-		                 for(int y=0; y<mat_aux[x].length; y++)
-		                 {
-		                	 if(mat_aux[x][y]==ID_block) 
-		          			  {
-		                		 dist=(x-axis[0])+1;
-		                		 bloco_novo=axis[0]-dist;
-		                		 if(bloco_novo < 0 || bloco_novo >= mat_aux.length || mat_aux[bloco_novo][y] != 0) return;
-		                		 mat_aux[bloco_novo][y]=ID_block;
-		          			  }
-		                 }
-		          }
-				mat=mat_aux;
-			break;
-			
-			case 4: //down
-				for(int x=0; x<mat_aux.length; x++)
-		          { 
-		                 // Loop through all columns of current row 
-		                 for(int y=0; y<mat_aux[x].length; y++)
-		                 {
-		                	 if(mat_aux[x][y]==ID_block) 
-		          			  {
-		                		 dist=(axis[0]-x)+1;
-		                		 bloco_novo=axis[0]+dist;
-		                		 if(bloco_novo < 0 || bloco_novo >= mat_aux.length || mat_aux[bloco_novo][y] != 0) return;
-		                		 mat_aux[bloco_novo][y]=ID_block;
-		          			  }
-		                 }
-		          }
-				mat=mat_aux;
-				break;
-		}
-		
+    
+    for(int x=0; x<mat.length; x++)
+    { 
+      for(int y=0; y<mat[x].length; y++)
+      {
+    		switch(move){
+    			case 1: //left
+    				if(mat[x][y]==ID_block) {
+    					dist=(y-axis[1])+1;
+    					bloco_novo=axis[1]-dist;
+    					if(bloco_novo < 0 || bloco_novo >= mat[x].length || mat[x][bloco_novo] != 0) {
+    						mat_aux=mat;
+    						return mat;
+    					}
+    					mat_aux[x][bloco_novo]=ID_block;
+    				}
+    			break;
+    			
+    			  
+    			case 2: //right
+    				if(mat[x][y]==ID_block) {
+    					dist=(axis[1]-y)+1;
+    					bloco_novo=axis[1]+dist;
+    					if(bloco_novo < 0 || bloco_novo >= mat[x].length || mat[x][bloco_novo] != 0) {
+    							mat_aux=mat;
+    							return mat;
+    						}
+    					mat_aux[x][bloco_novo]=ID_block;
+    				}
+    			break;
+    			
+    			case 3: //up
+    				if(mat[x][y]==ID_block) {
+    					dist=(x-axis[0])+1;
+    					bloco_novo=axis[0]-dist;
+    					if(bloco_novo < 0 || bloco_novo >= mat.length || mat[bloco_novo][y] != 0) {
+    						mat_aux=mat;
+    						return mat;
+    					}
+    					mat_aux[bloco_novo][y]=ID_block;
+    				}
+    			break;
+    			
+    			case 4: //down
+    				if(mat[x][y]==ID_block) {
+    					dist=(axis[0]-x)+1;
+    					bloco_novo=axis[0]+dist;
+    					if(bloco_novo < 0 || bloco_novo >= mat.length || mat[bloco_novo][y] != 0) {
+    						mat_aux=mat;
+    						return mat;
+    					}
+    					mat_aux[bloco_novo][y]=ID_block;
+    				}
+    			break;
+    			
+    		}
+      }
+      
+    }
+    
+    mat=mat_aux;
+    this.print2D(mat);
+    System.out.println("Nunca chega aqui ahabahbck ");
+    return mat;
+
 	}
-	
-	
-	
-	
+
+public void print2D(int mat[][]) { 
+    // Loop through all rows 
+    for (int[] row : mat) { 
+
+        // Loop through all columns of current row 
+        for (int x : row) 
+            System.out.print(x + " "); 
+       System.out.println();
+    }
+
 }
 
 
+public static int[][] cloneArray(int[][] src) {
+    int length = src.length;
+    int[][] target = new int[length][src[0].length];
+    for (int i = 0; i < length; i++) {
+        System.arraycopy(src[i], 0, target[i], 0, src[i].length);
+    }
+    return target;
+}
+
+}
