@@ -60,8 +60,8 @@ public class Level extends JPanel{
 			break;
 		}
 		
-		board_sizeX = this.board.length;
-		board_sizeY = this.board[0].length;
+		board_sizeY = this.board.length;
+		board_sizeX = this.board[0].length;
 	}
 	public void drawLevel(Graphics g) {
 		int xS = 650/this.getLevel_sizeX();
@@ -76,7 +76,7 @@ public class Level extends JPanel{
 			for(int j=0; j<this.getLevel_sizeY(); j++) 
 			{		
 					//draw pieces
-					g.setColor(chooseColor(board[i][j]));
+					g.setColor(chooseColor(board[j][i]));
 					g.fillRect(70+i*xS, 50+j*yS, dimensionX, dimensionY);
 			}
 		}
