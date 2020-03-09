@@ -1,3 +1,5 @@
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
 public class Logic {
 
@@ -177,18 +179,34 @@ public int[][] fold(int[][] mat, int move, int ID_block) {
     					mat_aux[bloco_novo][y]=ID_block;
     				}
     			break;
-    			
     		}
       }
       
     }
     
     mat=mat_aux;
-   //this.print2D(mat);
+    if(isBoardFull(mat)){
+		JFrame frame = new JFrame();
+		frame.setBounds(200, 100, 500, 350);
+		frame.setTitle("You Won");
+		JButton start = new JButton("YOU WON!");
+		frame.add(start);
+		frame.setResizable(false);	
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
     return mat;
 
 	}
 
+	public boolean isBoardFull(int[][] board){
+		for(int i=0; i<board[0].length;i++){
+			for(int j=0; j<board.length; j++){
+				if(board[j][i] == 0) return false;
+			}
+		}
+		return true;
+	}
 public void print2D(int mat[][]) { 
     // Loop through all rows 
     for (int[] row : mat) { 
