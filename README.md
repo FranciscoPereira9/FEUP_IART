@@ -8,15 +8,18 @@
 
 ## PROJETO 1: FOLDING BLOCKS
 *****
+
+### Especificação do trabalho
 * Neste projeto é pretendido implementar um algoritmo de  inteligência artificial capaz de vencer uma série de niveis do jogo **Folding Blocks**. Este jogo inicialmente composto por um tabuleiro com uma ou mais peças, tem como objetivo, ocupar todos os espaços dos tabuleiros utilizando essas peças. 
 Esta utilização é feita através de uma seleção da peça a jogar, seguida de uma transformação simétrica, isto é, cada movimento vai **duplicar** o tamanho da peça na direção escolhida.
 
+### Formulação do Problema
 * Representação do estado : O tabuleiro do jogo vai ser representado por uma matriz com tamanho variável (varia conforme o nivel).
 Esta matriz é um `int[][]` cujo valor inicial para todas as posições é 0 representando assim os espaços vazios. Seguidamente, e consoante o nivel, são predefinidas peças para se jogar, por exemplo, no nivel 1 só é colocada uma peça na primeira posição, portanto ` board[0][0] = 1 `. Caso existam mais peças o id desta vai incrementando.
 
 * Teste objetivo : O jogo acaba quando o tabuleiro não tiver espaços vazios. Ou seja, quando em todas as posições do tabuleiro x e y, `board[x][y]` seja diferente de 0.
 
-
+* A heuristica será a distância até à solução. Por outras palavras, será a diferença entre o Tamanho do tabuleiro e o número de quadrados preenchidos
 ### Implementação do jogo
 
 * Linguagem escolhida para desenvolvimento do código : **Java**
