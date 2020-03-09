@@ -20,6 +20,26 @@ Esta utilização é feita através de uma seleção da peça a jogar, seguida d
     * Level.java
     * Logic.java
 
+* Representação do estado : O tabuleiro do jogo vai ser representado por uma matriz com tamanho variável (varia conforme o nivel).
+Esta matriz é um `int[][]` cujo valor inicial para todas as posições é 0 representando assim os espaços vazios. Seguidamente, e consoante o nivel, são predefinidas peças para se jogar, por exemplo, no nivel 1 só é colocada uma peça na primeira posição, portanto ` board[0][0] = 1 `. Caso existam mais peças o id desta vai incrementando.
+
+* Teste objetivo : O jogo acaba quando o tabuleiro não tiver espaços vazios. Ou seja, quando em todas as posições do tabuleiro x e y, `board[x][y]` seja diferente de 0.
+
+
+### Implementação do jogo
+
+Para a implementação do jogo utilizamos 4 classes. 
+Main, Game, Logic e Level.
+* A classe Level trata de definir, e desenhar os niveis. Trata da atribuição de cores consoante os valores da matriz e trata de atualizar a mesma.
+   * ![alt text](https://github.com/BernardoCMoreira/FEUP_IART/blob/master/FoldingBlocks/images/level.PNG "Level")
+
+* A classe Logic verifica a logica de jogo. Trata de fazer as jogadas, bem como as verificações de jogada e de fim de jogo. 
+   * ![alt text](https://github.com/BernardoCMoreira/FEUP_IART/blob/master/FoldingBlocks/images/logic.PNG "Level")
+
+* Finalmente, tanto a classe Main como Game servem para funcionalidades da interface. Permite a criação de uma janela para o jogo, bem como permite à classe Level que desenhe nesta mesma interface. Inicialmente implementamos tambem deteção de pressão de teclas, para testarmos as funcionalidades do jogo antes de implementar os algoritmos.
+   * ![alt text](https://github.com/BernardoCMoreira/FEUP_IART/blob/master/FoldingBlocks/images/game.PNG "Level")
+   * ![alt text](https://github.com/BernardoCMoreira/FEUP_IART/blob/master/FoldingBlocks/images/main.PNG "Level")
+
 ### Representação do estado inicial do nivel 6
 ![alt text](https://github.com/BernardoCMoreira/FEUP_IART/blob/master/FoldingBlocks/images/level6_init.PNG "Level 6 init")
 
