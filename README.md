@@ -24,4 +24,4 @@ Esta utilização é feita através de uma seleção da peça a jogar, seguida d
 ![alt text](https://github.com/BernardoCMoreira/FEUP_IART/blob/master/FoldingBlocks/images/level6_init.PNG "Level 6 init")
 
 ### Representação do estado final do nivel 6
-![alt text](https://github.com/BernardoCMoreira/FEUP_IART/blob/master/FoldingBlocks/images/level6_won.PNG "Level 6 init")
+![alt text](https://github.com/BernardoCMoreira/FEUP_IART/blob/master/FoldingBlocks/images/level6_won.PNG "Level 6 won")
