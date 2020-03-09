@@ -2,9 +2,9 @@
 [Projeto 1 - Folding Blocks](https://github.com/BernardoCMoreira/FEUP_IART#projeto-1-folding-blocks)
 ## Autores:
 *****
-* Bernardo Moreira
-* Francisco Pereira
-* Filipe Nogueira 
+* Bernardo Moreira - up201604014
+* Francisco Pereira - up201605306
+* Filipe Nogueira - up201604129
 
 ## PROJETO 1: FOLDING BLOCKS
 *****
@@ -34,7 +34,7 @@ Esta matriz é um `int[][]` cujo valor inicial para todas as posições é 0 rep
 * A classe Logic verifica a logica de jogo. Trata de fazer as jogadas, bem como as verificações de jogada e de fim de jogo. 
    * ![alt text](https://github.com/BernardoCMoreira/FEUP_IART/blob/master/FoldingBlocks/images/logic.PNG "Level")
 
-* Finalmente, tanto a classe Main como Game servem para funcionalidades da interface. Permite a criação de uma janela para o jogo, bem como permite à classe Level que desenhe nesta mesma interface. Inicialmente implementamos tambem deteção de pressão de teclas, para testarmos as funcionalidades do jogo antes de implementar os algoritmos.
+* Finalmente, tanto a classe Main como Game servem para funcionalidades da interface. Permite a criação de uma janela para o jogo, bem como permite à classe Level que desenhe nesta mesma interface. Inicialmente implementamos também deteção de pressão de teclas, para testarmos as funcionalidades do jogo antes de implementar os algoritmos.
    * ![alt text](https://github.com/BernardoCMoreira/FEUP_IART/blob/master/FoldingBlocks/images/game.PNG "Level")
    * ![alt text](https://github.com/BernardoCMoreira/FEUP_IART/blob/master/FoldingBlocks/images/main.PNG "Level")
 
