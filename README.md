@@ -19,6 +19,25 @@ Esta matriz é um `int[][]` cujo valor inicial para todas as posições é 0 rep
 
 * Teste objetivo : O jogo acaba quando o tabuleiro não tiver espaços vazios. Ou seja, quando em todas as posições do tabuleiro x e y, `board[x][y]` seja diferente de 0.
 
+* Operadores : 
+
+   ![alt text](https://github.com/BernardoCMoreira/FEUP_IART/blob/master/FoldingBlocks/images/Tabela%20de%20Operadores.PNG "Tabela de Operadores")
+   
+   - ID - referente à peça a ser jogada;
+   
+   - Tab[ ][ ] - valor na posição de cada tabuleiro (pode ter os seguintes valores: 0 - se estiver livre / ID - numero referente à peça a ser jogada);
+   
+   - Xi / Yi - Coordenada referente à linha/coluna (respectivamente) do bloco atual;
+   
+   - Xb / Yb - Coordenada referente à linha/coluna (respectivamente) do bloco novo;
+   
+   - x_eixo / y_eixo - Coordenada referente à linha/coluna (respectivamente) do eixo de simetria;
+   
+   - Dist - distância ao eixo de simetria;
+   
+   - N x M - dimensões do tabuleiro de jogo (linhas/colunas);
+   
+
 * A heuristica será a distância até à solução. Por outras palavras, será a diferença entre o Tamanho do tabuleiro e o número de quadrados preenchidos
 ### Implementação do jogo
 
