@@ -11,6 +11,14 @@
 * Neste projeto é pretendido implementar um algoritmo de  inteligência artificial capaz de vencer uma série de niveis do jogo **Folding Blocks**. Este jogo inicialmente composto por um tabuleiro com uma ou mais peças, tem como objetivo, ocupar todos os espaços dos tabuleiros utilizando essas peças. 
 Esta utilização é feita através de uma seleção da peça a jogar, seguida de uma transformação simétrica, isto é, cada movimento vai **duplicar** o tamanho da peça na direção escolhida.
 
+* Representação do estado : O tabuleiro do jogo vai ser representado por uma matriz com tamanho variável (varia conforme o nivel).
+Esta matriz é um `int[][]` cujo valor inicial para todas as posições é 0 representando assim os espaços vazios. Seguidamente, e consoante o nivel, são predefinidas peças para se jogar, por exemplo, no nivel 1 só é colocada uma peça na primeira posição, portanto ` board[0][0] = 1 `. Caso existam mais peças o id desta vai incrementando.
+
+* Teste objetivo : O jogo acaba quando o tabuleiro não tiver espaços vazios. Ou seja, quando em todas as posições do tabuleiro x e y, `board[x][y]` seja diferente de 0.
+
+
+### Implementação do jogo
+
 * Linguagem escolhida para desenvolvimento do código : **Java**
 
 * Trabalho realizado em **Eclipse** & **VSCode**
@@ -20,16 +28,6 @@ Esta utilização é feita através de uma seleção da peça a jogar, seguida d
     * Level.java
     * Logic.java
 
-* Representação do estado : O tabuleiro do jogo vai ser representado por uma matriz com tamanho variável (varia conforme o nivel).
-Esta matriz é um `int[][]` cujo valor inicial para todas as posições é 0 representando assim os espaços vazios. Seguidamente, e consoante o nivel, são predefinidas peças para se jogar, por exemplo, no nivel 1 só é colocada uma peça na primeira posição, portanto ` board[0][0] = 1 `. Caso existam mais peças o id desta vai incrementando.
-
-* Teste objetivo : O jogo acaba quando o tabuleiro não tiver espaços vazios. Ou seja, quando em todas as posições do tabuleiro x e y, `board[x][y]` seja diferente de 0.
-
-
-### Implementação do jogo
-
-Para a implementação do jogo utilizamos 4 classes. 
-Main, Game, Logic e Level.
 * A classe Level trata de definir, e desenhar os niveis. Trata da atribuição de cores consoante os valores da matriz e trata de atualizar a mesma.
    * ![alt text](https://github.com/BernardoCMoreira/FEUP_IART/blob/master/FoldingBlocks/images/level.PNG "Level")
 
