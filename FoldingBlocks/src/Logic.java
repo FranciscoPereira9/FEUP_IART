@@ -7,7 +7,7 @@ public class Logic {
 	public int x_axis;
 	public int y_axis;
 	
-	public int[] get_axis(int[][] mat, int move, int ID_block) {
+public int[] get_axis(int[][] mat, int move, int ID_block) {
 
 		
 		int x;
@@ -199,7 +199,7 @@ public int[][] fold(int[][] mat, int move, int ID_block) {
 
 	}
 
-	public boolean isBoardFull(int[][] board){
+public boolean isBoardFull(int[][] board){
 		for(int i=0; i<board[0].length;i++){
 			for(int j=0; j<board.length; j++){
 				if(board[j][i] == 0) return false;
@@ -207,6 +207,7 @@ public int[][] fold(int[][] mat, int move, int ID_block) {
 		}
 		return true;
 	}
+
 public void print2D(int mat[][]) { 
     // Loop through all rows 
     for (int[] row : mat) { 

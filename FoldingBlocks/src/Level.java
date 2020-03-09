@@ -1,5 +1,3 @@
-
-
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -120,10 +118,6 @@ public class Level extends JPanel{
 
 	public void update_board(int[][] mat){
 		this.board=mat;
-	}
-
-	public void zeros() {
-
 	}
 
 }
