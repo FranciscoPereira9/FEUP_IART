@@ -39,10 +39,17 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		this.up=false;this.down=false;this.right=false;this.left=false;
 		this.move=0;
 		this.ID_block=1;
-		this.num_level=1;
+		this.num_level=5;
 		this.functional= new Logic();
 		l = new Level(num_level);
 		this.mat=l.get_board();
+		
+		
+		// Algoritmo
+		Algoritmo al = new Algoritmo(this.mat, l);
+		System.out.println(al.chooseBiggerPiece());
+		al.chooseMove(al.chooseBiggerPiece());
+	
 
 	}
 	
@@ -51,13 +58,12 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		g.setColor(Color.black);
 		g.fillRect(1,1,792,692);
 		this.l.drawLevel(g);
-	
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		timer.start();
-
+	
 		repaint();
 	}
 

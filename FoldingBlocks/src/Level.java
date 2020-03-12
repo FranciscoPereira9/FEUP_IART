@@ -80,7 +80,7 @@ public class Level extends JPanel{
 			}
 		}
 	}
-	
+
 	public Color chooseColor(int value) {
 		Color color = null;
 		
@@ -119,6 +119,31 @@ public class Level extends JPanel{
 	public void update_board(int[][] mat){
 		this.board=mat;
 	}
-
+	
+	public int getNumberPieces() {
+		int numberPieces = 0;
+		
+		switch(this.num_level) {
+			case 1:
+				numberPieces=1;
+				break;
+			case 2:
+				numberPieces=2;
+				break;
+			case 3:
+				numberPieces=1;
+				break;
+			case 4:
+				numberPieces=3;
+				break;
+			case 5:
+				numberPieces=3;
+				break;
+			case 6:
+				numberPieces=3;
+				break;
+		}
+		return numberPieces;
+	}
 }
 
