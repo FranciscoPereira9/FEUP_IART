@@ -44,6 +44,8 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		l = new Level(num_level);
 		this.mat=l.get_board();
 
+		//Algoritmo al = new Algoritmo(this.mat, l);
+		//al.algoritmo1();
 	}
 	
 	public void paint(Graphics g) {
@@ -51,6 +53,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		g.setColor(Color.black);
 		g.fillRect(1,1,792,692);
 		this.l.drawLevel(g);
+		
 	}
 
 	@Override
@@ -86,9 +89,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 			//Do some movement;
 			this.down = true;
 			this.move=4;
-		}
-		
-		
+		}		
 		
 		//Identificar os blocos a jogar
 		if(e.getKeyCode() == KeyEvent.VK_1) {

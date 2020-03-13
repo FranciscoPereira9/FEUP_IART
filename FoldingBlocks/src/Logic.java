@@ -207,7 +207,6 @@ public int[][] fold(int[][] mat, int move, int ID_block) {
 
 	}
 
-
 /*
  * If move is valid the function will return a boolean true. Otherwise returns false.
  */
