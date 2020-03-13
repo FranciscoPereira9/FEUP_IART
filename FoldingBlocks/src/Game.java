@@ -43,13 +43,6 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		this.functional= new Logic();
 		l = new Level(num_level);
 		this.mat=l.get_board();
-		
-		
-		// Algoritmo
-		Algoritmo al = new Algoritmo(this.mat, l);
-		System.out.println(al.chooseBiggerPiece());
-		al.chooseMove(al.chooseBiggerPiece());
-	
 
 	}
 	

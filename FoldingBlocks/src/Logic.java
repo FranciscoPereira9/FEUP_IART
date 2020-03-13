@@ -225,7 +225,6 @@ public boolean move_validation(int[][] mat, int  bloco_novo, int move, int x, in
 		default:
 			return false;
 	}
-	
 }
 
 /*
