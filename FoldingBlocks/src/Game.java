@@ -11,6 +11,9 @@ import javax.swing.Timer;
 
 import java.util.HashMap;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
 @SuppressWarnings({ "serial", "unused" })
 
 public class Game extends JPanel implements KeyListener, ActionListener {
@@ -18,7 +21,10 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 	private Timer timer;
 	private int num_level;
 	private Level l;
+	private Level level_algoritmo; 
+	public Algoritmo al;
 	private int[][] mat;
+
 	
 	private int move;
 	private int ID_block;
@@ -27,6 +33,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 	public boolean up;
 	public boolean down;
 	public Logic functional;
+	
   
 	public Game() {
 
@@ -39,13 +46,14 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		this.up=false;this.down=false;this.right=false;this.left=false;
 		this.move=0;
 		this.ID_block=1;
-		this.num_level=5;
+		this.num_level=6;
 		this.functional= new Logic();
 		l = new Level(num_level);
 		this.mat=l.get_board();
+		int [][] aux_board=cloneArray(this.mat);
+		al = new Algoritmo(aux_board,l.getLevel(),l.getNumberPieces());
+		al.algoritmo1();
 
-		//Algoritmo al = new Algoritmo(this.mat, l);
-		//al.algoritmo1();
 	}
 	
 	public void paint(Graphics g) {
@@ -110,6 +118,16 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		
 		//Fazer movimento e dar update ao board
 		board=this.functional.fold(this.mat, this.move, this.ID_block);
+		if(this.functional.isBoardFull(board)){
+			JFrame frame = new JFrame();
+			frame.setBounds(200, 100, 500, 350);
+			frame.setTitle("You Won");
+			JButton start = new JButton("YOU WON!");
+			frame.add(start);
+			frame.setResizable(false);	
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.setVisible(true);
+		}
 		this.l.update_board(board);
 	}
 
@@ -141,8 +159,15 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
+	}
 
-		
+	public static int[][] cloneArray(int[][] src) {
+		int length = src.length;
+		int[][] target = new int[length][src[0].length];
+		for (int i = 0; i < length; i++) {
+			System.arraycopy(src[i], 0, target[i], 0, src[i].length);
+		}
+		return target;
 	}
 
 }

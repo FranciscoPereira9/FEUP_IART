@@ -1,27 +1,37 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
+//import java.util.ArrayList;
+//import java.util.List;
+//import java.util.PriorityQueue;
+import java.util.HashMap;
 
 public class Algoritmo {
 		
 	private int[][] board;
-	private Level level;
 	private Logic logic = new Logic();
 	private int numberPieces;
-	private String plays = new String();
+	public String plays = new String();
 	public int chosenPiece = 0;
-	private List<Node> usedNodes;
-	private PriorityQueue<Node> unusedNodes;
+	//private List<Node> usedNodes;
+	//private PriorityQueue<Node> unusedNodes;
 	static final int maxDepth = 15;
+	public boolean solutionfound=false;
+	public Node solution;
 
-	public Algoritmo(int[][] board, Level level) {
+	public Algoritmo(int[][] board, int level, int numberPieces) {
 		this.board = board;
-		this.level = level;
-		this.numberPieces = level.getNumberPieces();
-		this.usedNodes = new ArrayList<>();
-		this.unusedNodes = new PriorityQueue<>();
+		//this.level = level;
+		this.numberPieces = numberPieces;
+		this.solution=null;
+		this.plays=null;
+		//this.usedNodes = new ArrayList<>();
+		//this.unusedNodes = new PriorityQueue<>();
 	}
 	
+	public boolean algoritmo1(){
+		Node parentNode = new Node(this.board, null, "", 0, 0);
+		
+		return solve(parentNode);
+	}
+
 	public boolean verifyFinalState(int[][]board){
 		for (int i=0; i<board.length; i++){
 			for(int j=0;j<board[0].length; j++){
@@ -31,29 +41,18 @@ public class Algoritmo {
 		return true;
 	}
 
-	public boolean algoritmo1(){
-		Node parentNode = new Node(this.board, null, "", 0, 0);
-		
-		return solve(parentNode);
-	}
-	
 	private boolean solve(Node node){
 		if(verifyFinalState(node.getBoard())){
-
+			this.solutionfound=true;
+			this.solution=node;
+			getplays(node);
 			return true;
 		}
-		System.out.println(node.getOperation());
-		addChildNodes(node);
+		else {
+			addChildNodes(node);
+			return false;
+		}
 
-		Node newNode;
-        do {
-            newNode = unusedNodes.poll();
-            if(newNode == null)
-                return false;
-        }    
-        while(newNode.getDepth() >= maxDepth);
-
-        return solve(newNode);
 	}
 
 	private void addChildNodes(Node node){
@@ -63,17 +62,15 @@ public class Algoritmo {
 		
 		for(int i=1; i<=this.numberPieces; i++){
 			for(int j=1; j<=4; j++){
-				calculatedBoard = logic.fold(node.getBoard(), j, i);
-				if(!compareBoards(node.getBoard(), calculatedBoard)){
-					Node childNode = new Node (calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
-					if(!usedNodes.contains(childNode) && !unusedNodes.contains(childNode)){
-						unusedNodes.add(childNode);
-						usedNodes.add(childNode);
-						System.out.println("NODE" + childNode);
+					calculatedBoard = logic.fold(node.getBoard(), j, i);
+					if(!compareBoards(node.getBoard(), calculatedBoard)){
+						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
+						solve(childNode);
+						if(this.solutionfound) break;	
 					}
-					
-				}
+					if(this.solutionfound) break;
 			}
+			if(this.solutionfound) break;
 		}
 	}
 
@@ -89,6 +86,16 @@ public class Algoritmo {
 		return true;
 	}
 
+	public void getplays(Node solution){
+		if(solution.parentNode != null){
+			getplays(solution.parentNode);
+		}
+		if(solution.operation != null) {
+			plays=plays+solution.operation;
+			System.out.println(solution.getOperation());
+		}
+	}
+
 
 	private class Node{
 
@@ -97,7 +104,6 @@ public class Algoritmo {
 		private String operation;
 		private int depth;
 		private int cost;
-		private int id_block;
 
 		public Node(int[][] board, Node parentNode, String operation, int depth, int cost) {
             this.board = board;

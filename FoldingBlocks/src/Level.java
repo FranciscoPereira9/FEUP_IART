@@ -145,5 +145,9 @@ public class Level extends JPanel{
 		}
 		return numberPieces;
 	}
+
+	public int getLevel(){
+		return this.num_level;
+	}
 }
 

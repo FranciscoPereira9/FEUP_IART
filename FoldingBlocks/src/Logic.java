@@ -1,5 +1,5 @@
-import javax.swing.JButton;
-import javax.swing.JFrame;
+//import javax.swing.JButton;
+//import javax.swing.JFrame;
 
 public class Logic {
 
@@ -193,7 +193,7 @@ public int[][] fold(int[][] mat, int move, int ID_block) {
     }
     
     mat=mat_aux;
-    if(isBoardFull(mat)){
+    /*if(isBoardFull(mat)){
 		JFrame frame = new JFrame();
 		frame.setBounds(200, 100, 500, 350);
 		frame.setTitle("You Won");
@@ -202,7 +202,7 @@ public int[][] fold(int[][] mat, int move, int ID_block) {
 		frame.setResizable(false);	
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-	}
+	}*/
     return mat;
 
 	}
