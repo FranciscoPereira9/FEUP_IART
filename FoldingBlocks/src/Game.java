@@ -46,7 +46,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		this.up=false;this.down=false;this.right=false;this.left=false;
 		this.move=0;
 		this.ID_block=1;
-		this.num_level=5;
+		this.num_level=7;
 		this.functional= new Logic();
 		l = new Level(num_level);
 		this.mat=l.get_board();

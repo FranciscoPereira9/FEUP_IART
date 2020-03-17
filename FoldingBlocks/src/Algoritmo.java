@@ -57,6 +57,7 @@ public class Algoritmo {
 		if(verifyFinalState(node.getBoard())){
 			this.solutionfound=true;
 			this.solution=node;
+			
 			getplays(node);
 			return true;
 		}
@@ -135,35 +136,35 @@ public class Algoritmo {
 		}
 
 		for(int i=unusedNodes.size()-1; i>=0; i--){
-			if(heuristica(unusedNodes.get(i)) < this.value && heuristica(unusedNodes.get(i)) >= 0){
+			if(heuristica(unusedNodes.get(i)) <= this.value && heuristica(unusedNodes.get(i)) >= 0){
 				this.value = heuristica(unusedNodes.get(i));
 				this.saver = i;
 			}
 		}
-
-		if(this.counterAux== this.value){
+		if(this.counterAux== this.saver){
 					System.out.println("Numero repetido");
-					this.stuck = true;
-		} 	
-		this.counterAux = this.value;
+					unusedNodes.remove(this.saver);
+	
+		}
+
+		this.counterAux = this.saver;
 		analyzeGreedy(unusedNodes.get(this.saver));
 	}
 
 	public boolean analyzeGreedy(Node a){
 	
-		if(verifyFinalState(a.getBoard()) || this.stuck == true){
+		if(verifyFinalState(a.getBoard())){
 			this.solutionfound=true;
 			this.solution=a;
+			System.out.println("Usede nodes: " +usedNodes.size());
 			getplays(a);
 			return true;
 		}
 		else {
-			
 				addGreedy(a);
 				return false;
 		 }
-		
-		
+	
 	}
 
 	private class Node{

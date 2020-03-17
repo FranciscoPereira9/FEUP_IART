@@ -59,8 +59,15 @@ public class Level extends JPanel{
 			this.board[9][7] = 2;
 			this.board[7][7] = 3;
 			break;
+			
+		case 7:
+			this.board = new int [10][8];
+			this.board[1][3] = 1;
+			this.board[9][7] = 2;
+			this.board[7][7] = 3;
+			this.board[1][4] = 4;
+			break;
 		}
-		
 		board_sizeY = this.board.length;
 		board_sizeX = this.board[0].length;
 	}
@@ -101,6 +108,9 @@ public class Level extends JPanel{
 			break;
 		case 3:
 			color = Color.GREEN;
+			break;
+		case 4:
+			color = Color.LIGHT_GRAY;
 			break;
 		}
 		
@@ -146,6 +156,9 @@ public class Level extends JPanel{
 				break;
 			case 6:
 				numberPieces=3;
+				break;
+			case 7:
+				numberPieces=4;
 				break;
 		}
 		return numberPieces;
