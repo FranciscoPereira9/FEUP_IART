@@ -1,5 +1,5 @@
-//import java.util.ArrayList;
-//import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 //import java.util.PriorityQueue;
 import java.util.HashMap;
 
@@ -10,28 +10,40 @@ public class Algoritmo {
 	private int numberPieces;
 	public String plays = new String();
 	public int chosenPiece = 0;
-	//private List<Node> usedNodes;
-	//private PriorityQueue<Node> unusedNodes;
+	private List<Node> unusedNodes;
+	private List<Node> usedNodes;
 	static final int maxDepth = 15;
 	public boolean solutionfound=false;
 	public Node solution;
-
+	private	int saver ;
+	private	int value ;
+	private boolean stuck = false;
+	private int counterAux;
 	public Algoritmo(int[][] board, int level, int numberPieces) {
 		this.board = board;
-		//this.level = level;
 		this.numberPieces = numberPieces;
 		this.solution=null;
 		this.plays=null;
-		//this.usedNodes = new ArrayList<>();
-		//this.unusedNodes = new PriorityQueue<>();
+		this.unusedNodes = new ArrayList<>();
+		this.usedNodes = new ArrayList<>();
+		this.saver = -1;
+		this.value = this.board.length* this.board[0].length;
+		this.counterAux = this.board.length* this.board[0].length;
+
 	}
 	
-	public boolean algoritmo1(){
+	/*public boolean algoritmo1(){
 		Node parentNode = new Node(this.board, null, "", 0, 0);
 		
 		return solve(parentNode);
-	}
+	}*/
 
+	public boolean algoritmo1(){
+		Node parentNode = new Node(this.board, null, "", 0, 0);
+		unusedNodes.add(parentNode);
+		return analyzeGreedy(parentNode);
+	}
+	
 	public boolean verifyFinalState(int[][]board){
 		for (int i=0; i<board.length; i++){
 			for(int j=0;j<board[0].length; j++){
@@ -96,6 +108,63 @@ public class Algoritmo {
 		}
 	}
 
+	/*iremos representar a heuristica como a distancia ao objetivo
+		Ou seja
+	Numero total de espaços - Numero de espaços preenchidos.
+	*/
+	public int heuristica(Node a){
+			return a.getNodeBoardSize() - a.getPlacedPieces();
+	}
+
+	public void addGreedy(Node node){
+		final int depth = node.getDepth();
+        final int cost = node.getCost();
+		int[][] calculatedBoard;
+	
+		for(int i=1; i<=this.numberPieces; i++){
+			for(int j=1; j<=4; j++){	
+				calculatedBoard = logic.fold(node.getBoard(), j, i);
+				if(!compareBoards(node.getBoard(), calculatedBoard)){
+					usedNodes.add(node);
+					Node childNode = new Node (calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
+					if(!unusedNodes.contains(childNode)){
+						unusedNodes.add(childNode);
+					}		
+				}
+			}
+		}
+
+		for(int i=unusedNodes.size()-1; i>=0; i--){
+			if(heuristica(unusedNodes.get(i)) < this.value && heuristica(unusedNodes.get(i)) >= 0){
+				this.value = heuristica(unusedNodes.get(i));
+				this.saver = i;
+			}
+		}
+
+		if(this.counterAux== this.value){
+					System.out.println("Numero repetido");
+					this.stuck = true;
+		} 	
+		this.counterAux = this.value;
+		analyzeGreedy(unusedNodes.get(this.saver));
+	}
+
+	public boolean analyzeGreedy(Node a){
+	
+		if(verifyFinalState(a.getBoard()) || this.stuck == true){
+			this.solutionfound=true;
+			this.solution=a;
+			getplays(a);
+			return true;
+		}
+		else {
+			
+				addGreedy(a);
+				return false;
+		 }
+		
+		
+	}
 
 	private class Node{
 
@@ -127,6 +196,20 @@ public class Algoritmo {
 		}
 		public int getCost(){
 			return this.cost;
+		}
+
+		public int getPlacedPieces(){
+			int counter = 0;
+			for(int i=0; i<this.board.length; i++){
+				for(int j=0; j<this.board[0].length; j++){
+					if(this.board[i][j] != 0 )counter++;
+				}
+			}
+			return counter;
+		}
+
+		public int getNodeBoardSize(){
+			return this.board.length * this.board[0].length;
 		}
 	}
 		/*
