@@ -1,8 +1,10 @@
+import java.awt.AWTException;
+
 import javax.swing.JFrame;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws AWTException {
 
 		JFrame obj = new JFrame();
 		obj.setBounds(10, 10, 800, 700);

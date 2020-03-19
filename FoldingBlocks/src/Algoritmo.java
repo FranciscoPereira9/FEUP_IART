@@ -26,7 +26,7 @@ public class Algoritmo {
 		this.board = board;
 		this.numberPieces = numberPieces;
 		this.solution=null;
-		this.plays=null;
+		this.plays="";
 		this.unusedNodes = new ArrayList<>();
 		this.usedNodes = new ArrayList<>();
 		this.saver = -1;
@@ -108,7 +108,6 @@ public class Algoritmo {
 		}
 		if(solution.operation != null) {
 			plays=plays+solution.operation;
-			System.out.println(solution.getOperation());
 		}
 	}
 
