@@ -115,6 +115,18 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		if(e.getKeyCode() == KeyEvent.VK_5) {
 			this.ID_block = 5;
 		}
+		if(e.getKeyCode() == KeyEvent.VK_6) {
+			this.ID_block = 6;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_7) {
+			this.ID_block = 7;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_8) {
+			this.ID_block = 8;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_9) {
+			this.ID_block = 9;
+		}
 		
 		//Fazer movimento e dar update ao board
 		board=this.functional.fold(this.mat, this.move, this.ID_block);
@@ -122,8 +134,6 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 			JFrame frame = new JFrame();
 			frame.setBounds(200, 100, 500, 350);
 			frame.setTitle("You Won");
-			JButton start = new JButton("YOU WON!");
-			frame.add(start);
 			frame.setResizable(false);	
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setVisible(true);

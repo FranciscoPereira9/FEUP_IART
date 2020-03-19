@@ -2,9 +2,12 @@ import java.util.ArrayList;
 import java.util.List;
 //import java.util.PriorityQueue;
 import java.util.HashMap;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import java.util.Collections;
 
 public class Algoritmo {
-		
+
 	private int[][] board;
 	private Logic logic = new Logic();
 	private int numberPieces;
@@ -12,13 +15,13 @@ public class Algoritmo {
 	public int chosenPiece = 0;
 	private List<Node> unusedNodes;
 	private List<Node> usedNodes;
-	static final int maxDepth = 15;
+	static final int maxDepth = 20;
 	public boolean solutionfound=false;
 	public Node solution;
 	private	int saver ;
 	private	int value ;
 	private boolean stuck = false;
-	private int counterAux;
+	private int counterAux = 0;
 	public Algoritmo(int[][] board, int level, int numberPieces) {
 		this.board = board;
 		this.numberPieces = numberPieces;
@@ -28,8 +31,8 @@ public class Algoritmo {
 		this.usedNodes = new ArrayList<>();
 		this.saver = -1;
 		this.value = this.board.length* this.board[0].length;
-		this.counterAux = this.board.length* this.board[0].length;
-
+		this.counterAux = this.value;;
+		
 	}
 	
 	/*public boolean algoritmo1(){
@@ -118,33 +121,45 @@ public class Algoritmo {
 	}
 
 	public void addGreedy(Node node){
+
 		final int depth = node.getDepth();
         final int cost = node.getCost();
 		int[][] calculatedBoard;
-	
+		
 		for(int i=1; i<=this.numberPieces; i++){
 			for(int j=1; j<=4; j++){	
 				calculatedBoard = logic.fold(node.getBoard(), j, i);
 				if(!compareBoards(node.getBoard(), calculatedBoard)){
 					usedNodes.add(node);
+					//unusedNodes.remove(node);
 					Node childNode = new Node (calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
-					if(!unusedNodes.contains(childNode)){
+					if(!unusedNodes.contains(childNode) && !usedNodes.contains(childNode)){
 						unusedNodes.add(childNode);
+					}
+					else {
+						System.out.println("already used");
 					}		
 				}
 			}
-		}
-
-		for(int i=unusedNodes.size()-1; i>=0; i--){
+		}	
+	
+		for(int i = unusedNodes.size()-1 ; i>= 0 ; i--){
 			if(heuristica(unusedNodes.get(i)) <= this.value && heuristica(unusedNodes.get(i)) >= 0){
-				this.value = heuristica(unusedNodes.get(i));
-				this.saver = i;
+				
+					this.value = heuristica(unusedNodes.get(i));
+					this.saver = i;	
 			}
 		}
-		if(this.counterAux== this.saver){
-					System.out.println("Numero repetido");
-					unusedNodes.remove(this.saver);
-	
+
+		if(depthLimiter(unusedNodes.get(unusedNodes.size()-1)))return;
+		
+		if(this.counterAux == this.saver){
+			System.out.println("REPETIDO");
+			unusedNodes.remove(this.counterAux);
+			if(this.saver == this.unusedNodes.size()){
+				this.saver--;
+			}
+
 		}
 
 		this.counterAux = this.saver;
@@ -156,17 +171,95 @@ public class Algoritmo {
 		if(verifyFinalState(a.getBoard())){
 			this.solutionfound=true;
 			this.solution=a;
-			System.out.println("Usede nodes: " +usedNodes.size());
+			System.out.println("Used nodes: " +usedNodes.size());
 			getplays(a);
 			return true;
 		}
 		else {
-				addGreedy(a);
+			addGreedy(a);
+			return false;
+		 }
+	
+	}
+
+	public boolean analyzeAStar(Node a){
+		if(verifyFinalState(a.getBoard())){
+			this.solutionfound=true;
+			this.solution=a;
+			System.out.println("Used nodes: " +usedNodes.size());
+			getplays(a);
+			return true;
+		}
+		else {
+				addAStart(a);
 				return false;
 		 }
 	
 	}
 
+	public void addAStart(Node node){
+		
+		final int depth = node.getDepth();
+        final int cost = node.getCost();
+		int[][] calculatedBoard;
+	
+		for(int i=1; i<=this.numberPieces; i++){
+			for(int j=1; j<=4; j++){	
+				calculatedBoard = logic.fold(node.getBoard(), j, i);
+				if(!compareBoards(node.getBoard(), calculatedBoard)){
+					usedNodes.add(node);
+					unusedNodes.remove(node);
+					Node childNode = new Node (calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
+					if(!unusedNodes.contains(childNode) && !usedNodes.contains(childNode)){
+						unusedNodes.add(childNode);
+					}		
+				}
+			}
+		}
+
+		for(int i = unusedNodes.size()-1 ; i>= 0 ; i--){
+			if(heuristicaCost(unusedNodes.get(i)) <= this.value && heuristicaCost(unusedNodes.get(i)) >= 0){
+				this.value = heuristicaCost(unusedNodes.get(i));
+				this.saver = i;
+			}
+		}
+
+		if(depthLimiter(unusedNodes.get(this.saver)))return;
+		
+		if(this.counterAux == this.saver){
+			unusedNodes.remove(this.counterAux);
+			if(this.saver == this.unusedNodes.size()){
+				this.saver--;
+			}
+
+		}
+
+		this.counterAux = this.saver;
+		analyzeAStar(unusedNodes.get(this.saver));
+	}
+
+	public int heuristicaCost(Node node){
+		return heuristica(node) + node.getCost();
+	}
+
+	public boolean depthLimiter(Node node){
+		if(node.getDepth()>=maxDepth){
+			System.out.println("ERROR: Depth reached limit value");
+			System.out.println("Try it yourself!");
+			JFrame frame = new JFrame();
+			frame.setBounds(200, 100, 500, 350);
+			frame.setTitle("Couldn't find solution");
+			JButton start = new JButton("Depth reached limit value!");
+			frame.add(start);	
+			JButton start2 = new JButton("Let me try then");
+			frame.add(start2);			
+			frame.setResizable(false);	
+
+			frame.setVisible(true);
+			return true;
+		}
+		return false;
+	}
 	private class Node{
 
 		private int[][] board;
@@ -212,6 +305,7 @@ public class Algoritmo {
 		public int getNodeBoardSize(){
 			return this.board.length * this.board[0].length;
 		}
+
 	}
 		/*
 			1. Analisar tabuleiro atual se é o final
