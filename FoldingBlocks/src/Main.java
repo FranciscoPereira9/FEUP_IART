@@ -8,7 +8,7 @@ public class Main {
 
 		JFrame obj = new JFrame();
 		obj.setBounds(10, 10, 800, 700);
-		Game game = new Game();
+		Game game = new Game(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
 		obj.setTitle("Folding Blocks");
 		obj.setResizable(false);	
 		obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

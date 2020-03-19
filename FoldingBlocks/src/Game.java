@@ -47,7 +47,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 	private boolean end;
 	
   
-	public Game() throws AWTException {
+	public Game(int levelNumber, int algoritmoNumber) throws AWTException {
 
 		addKeyListener(this);
 		setFocusable(true);
@@ -58,7 +58,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		this.up=false;this.down=false;this.right=false;this.left=false;
 		this.move=0;
 		this.ID_block=1;
-		this.num_level=7;
+		this.num_level=levelNumber;
 		this.ai=false;
 		this.ai_i=0;
 		this.end=false;
@@ -68,7 +68,7 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		this.mat=l.get_board();
 		this.board_ai=l.get_board();
 		final int [][] aux_board=cloneArray(this.mat);
-		al = new Algoritmo(aux_board,l.getLevel(),l.getNumberPieces());
+		al = new Algoritmo(aux_board,l.getLevel(),l.getNumberPieces(),algoritmoNumber);
 		al.algoritmo1();
 		final String plays=al.plays;
 		interpretPlays(plays);

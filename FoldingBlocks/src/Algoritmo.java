@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.PriorityQueue;
+import java.util.PriorityQueue;
 import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JButton;
@@ -13,7 +13,7 @@ public class Algoritmo {
 	private int numberPieces;
 	public String plays = new String();
 	public int chosenPiece = 0;
-	private List<Node> unusedNodes;
+	private PriorityQueue<Node> unusedNodes;
 	private List<Node> usedNodes;
 	static final int maxDepth = 20;
 	public boolean solutionfound=false;
@@ -22,29 +22,49 @@ public class Algoritmo {
 	private	int value ;
 	private boolean stuck = false;
 	private int counterAux = 0;
-	public Algoritmo(int[][] board, int level, int numberPieces) {
+	private int algoritmoEscolhido;
+
+	public Algoritmo(int[][] board, int level, int numberPieces, int algoritmo) {
 		this.board = board;
 		this.numberPieces = numberPieces;
 		this.solution=null;
 		this.plays="";
-		this.unusedNodes = new ArrayList<>();
+	    switch(algoritmo){
+	    	case 1:
+	    	/*
+	    		O algoritmo é o depth, onde a fila n vai ser usada, mas tem de ser inicializada na mesma.
+	    	*/
+	 	    	this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
+				return n2.getCost() - n1.getCost();
+			});
+	    	break;
+			case 2:
+			// caso seja greedy a fila é organizada da seguinte forma;
+			this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
+				return n2.getCost() - n1.getCost();
+			});
+			break;
+			// caso seja Astar a fila é organizada da seguinte forma;
+			case 3:
+				this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
+				return heuristicaCost(n1) - heuristicaCost(n2);
+			});
+			break;
+		}
+	
 		this.usedNodes = new ArrayList<>();
 		this.saver = -1;
 		this.value = this.board.length* this.board[0].length;
-		this.counterAux = this.value;;
+		this.algoritmoEscolhido = algoritmo;
 		
 	}
 	
-	/*public boolean algoritmo1(){
-		Node parentNode = new Node(this.board, null, "", 0, 0);
-		
-		return solve(parentNode);
-	}*/
-
 	public boolean algoritmo1(){
 		Node parentNode = new Node(this.board, null, "", 0, 0);
+		
 		unusedNodes.add(parentNode);
-		return analyzeGreedy(parentNode);
+
+	    return solve(parentNode);
 	}
 	
 	public boolean verifyFinalState(int[][]board){
@@ -57,18 +77,47 @@ public class Algoritmo {
 	}
 
 	private boolean solve(Node node){
-		if(verifyFinalState(node.getBoard())){
-			this.solutionfound=true;
-			this.solution=node;
-			
-			getplays(node);
-			return true;
-		}
-		else {
-			addChildNodes(node);
-			return false;
-		}
 
+		if(this.algoritmoEscolhido == 1){
+
+			if(verifyFinalState(node.getBoard())){
+				this.solutionfound=true;
+				this.solution=node;
+				getplays(node);
+				return true;
+			}
+			else {
+				addChildNodes(node);
+				return false;
+			}
+
+		}
+		
+		else {
+				if(verifyFinalState(node.getBoard())){
+				this.solutionfound=true;
+				this.solution=node;
+				System.out.println("Game Won");
+				System.out.println("Used nodes: " + usedNodes.size());
+				getplays(node);
+				return true;
+			}
+			
+			addChildsGreedyAstar(node);
+		
+			Node newNode;
+
+			do{
+				
+	        	newNode = unusedNodes.poll();
+			
+	        	if(newNode == null)
+	           		return false;
+			}
+	        while(newNode.getDepth() >=20);
+
+	        return analyzeGreedyAstar(newNode);
+		}
 	}
 
 	private void addChildNodes(Node node){
@@ -119,7 +168,7 @@ public class Algoritmo {
 			return a.getNodeBoardSize() - a.getPlacedPieces();
 	}
 
-	public void addGreedy(Node node){
+	public void addChildsGreedyAstar(Node node){
 
 		final int depth = node.getDepth();
         final int cost = node.getCost();
@@ -130,7 +179,6 @@ public class Algoritmo {
 				calculatedBoard = logic.fold(node.getBoard(), j, i);
 				if(!compareBoards(node.getBoard(), calculatedBoard)){
 					usedNodes.add(node);
-					//unusedNodes.remove(node);
 					Node childNode = new Node (calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
 					if(!unusedNodes.contains(childNode) && !usedNodes.contains(childNode)){
 						unusedNodes.add(childNode);
@@ -140,47 +188,37 @@ public class Algoritmo {
 					}		
 				}
 			}
-		}	
-	
-		for(int i = unusedNodes.size()-1 ; i>= 0 ; i--){
-			if(heuristica(unusedNodes.get(i)) <= this.value && heuristica(unusedNodes.get(i)) >= 0){
-				
-					this.value = heuristica(unusedNodes.get(i));
-					this.saver = i;	
-			}
 		}
 
-		if(depthLimiter(unusedNodes.get(unusedNodes.size()-1)))return;
-		
-		if(this.counterAux == this.saver){
-			System.out.println("REPETIDO");
-			unusedNodes.remove(this.counterAux);
-			if(this.saver == this.unusedNodes.size()){
-				this.saver--;
-			}
-
-		}
-
-		this.counterAux = this.saver;
-		analyzeGreedy(unusedNodes.get(this.saver));
 	}
 
-	public boolean analyzeGreedy(Node a){
+	public boolean analyzeGreedyAstar(Node a){
 	
 		if(verifyFinalState(a.getBoard())){
 			this.solutionfound=true;
 			this.solution=a;
-			System.out.println("Used nodes: " +usedNodes.size());
+			System.out.println("Game Won");
+			System.out.println("Used nodes: " + usedNodes.size());
 			getplays(a);
 			return true;
 		}
-		else {
-			addGreedy(a);
-			return false;
-		 }
+		
+		addChildsGreedyAstar(a);
 	
-	}
+		Node newNode;
 
+		do{
+			
+        	newNode = unusedNodes.poll();
+		
+        	if(newNode == null)
+           		return false;
+		}
+        while(newNode.getDepth() >=20);
+
+        return analyzeGreedyAstar(newNode);
+	}
+/*
 	public boolean analyzeAStar(Node a){
 		if(verifyFinalState(a.getBoard())){
 			this.solutionfound=true;
@@ -236,7 +274,7 @@ public class Algoritmo {
 		this.counterAux = this.saver;
 		analyzeAStar(unusedNodes.get(this.saver));
 	}
-
+*/
 	public int heuristicaCost(Node node){
 		return heuristica(node) + node.getCost();
 	}
