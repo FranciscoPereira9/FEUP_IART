@@ -18,8 +18,6 @@ public class Algoritmo {
 	static final int maxDepth = 20;
 	public boolean solutionfound=false;
 	public Node solution;
-	private	int saver ;
-	private	int value ;
 	private boolean stuck = false;
 	private int counterAux = 0;
 	private int algoritmoEscolhido;
@@ -47,14 +45,12 @@ public class Algoritmo {
 			// caso seja Astar a fila é organizada da seguinte forma;
 			case 3:
 				this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
-				return heuristicaCost(n1) - heuristicaCost(n2);
+				return heuristicaCost(n2) - heuristicaCost(n1);
 			});
 			break;
 		}
 	
 		this.usedNodes = new ArrayList<>();
-		this.saver = -1;
-		this.value = this.board.length* this.board[0].length;
 		this.algoritmoEscolhido = algoritmo;
 		
 	}
@@ -92,7 +88,7 @@ public class Algoritmo {
 			}
 
 		}
-		
+
 		// greedy ou A*
 		else {
 				if(verifyFinalState(node.getBoard())){
@@ -161,13 +157,12 @@ public class Algoritmo {
 		}
 	}
 
-	/*iremos representar a heuristica como a distancia ao objetivo
-		Ou seja
-	Numero total de espaços - Numero de espaços preenchidos.
+	/*
+	iremos representar a heuristica como a distancia ao objetivo.
+		Ou seja, ter todo o tabuleiro preenchido
+	Numero total de espaços - Numero de espaços vazios.
 	*/
-	public int heuristica(Node a){
-			return a.getNodeBoardSize() - a.getPlacedPieces();
-	}
+
 
 	public void addChildsGreedyAstar(Node node){
 
@@ -180,6 +175,7 @@ public class Algoritmo {
 				calculatedBoard = logic.fold(node.getBoard(), j, i);
 				if(!compareBoards(node.getBoard(), calculatedBoard)){
 					usedNodes.add(node);
+				
 					Node childNode = new Node (calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
 					if(!unusedNodes.contains(childNode) && !usedNodes.contains(childNode)){
 						unusedNodes.add(childNode);
@@ -203,22 +199,28 @@ public class Algoritmo {
 			getplays(a);
 			return true;
 		}
-		
-		addChildsGreedyAstar(a);
-	
+		if(depthLimiter(a))return false;
+
+		addChildsGreedyAstar(a);	
+
 		Node newNode;
 
 		do{
 			
         	newNode = unusedNodes.poll();
-		
         	if(newNode == null)
            		return false;
+	
 		}
         while(newNode.getDepth() >=20);
-
-        return analyzeGreedyAstar(newNode);
+	
+		return analyzeGreedyAstar(newNode);	
 	}
+
+	public int heuristica(Node a){
+			return a.getNodeBoardSize() - (a.getNodeBoardSize() - a.getPlacedPieces());
+	}
+
 
 	public int heuristicaCost(Node node){
 		return heuristica(node) + node.getCost();
@@ -242,6 +244,7 @@ public class Algoritmo {
 		}
 		return false;
 	}
+
 	private class Node{
 
 		private int[][] board;
@@ -289,16 +292,6 @@ public class Algoritmo {
 		}
 
 	}
-		/*
-			1. Analisar tabuleiro atual se é o final
-				1.1. Se sim, retornar jogadas que levaram ao atual
-				1.2. Se não continuar algoritmo
-			2. Gerar tabuleiros "filhos" usando operadores e guardar numa lista comum
-					
-			3. Analisar <lista> à procura do melhor valor e voltar a 1
-			
-			Cada node na lista precisa do seu tabuleiro e da forma como foi gerado
-		 */
-	
+
 } 
 

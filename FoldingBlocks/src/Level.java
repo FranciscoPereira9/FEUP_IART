@@ -81,19 +81,20 @@ public class Level extends JPanel{
 			this.board[2][3] = 3;
 			this.board[5][3] = 4;
 			break;
+	
 		case 9:
-			this.board = new int [10][10];
-			this.board[0][0]=1;
-			this.board[0][9]=2;
-			this.board[9][0]=3;
-			this.board[9][9]=4;
-			this.board[4][3]=5;
-			this.board[5][4]=6;
-			this.board[3][5]=7;
-			this.board[5][6]=8;
-			this.board[9][5]=9;
-			break; 	
+			this.board = new int [3][6];
+			this.board[0][0] = 1;
+			this.board[2][0] = 4;
+			this.board[0][3] = 2;
+			this.board[1][2] = 2;
+			this.board[2][3] = 2;
+			this.board[0][5] = 3;
+			this.board[1][4] = 3;
+			this.board[2][5] = 3;
+			break;
 		}
+		
 		board_sizeY = this.board.length;
 		board_sizeX = this.board[0].length;
 	}
@@ -204,6 +205,9 @@ public class Level extends JPanel{
 				numberPieces=4;
 				break;
 			case 9:
+				numberPieces = 6;
+				break;
+			case 10:
 				numberPieces = 9;
 				break;
 		}

@@ -11,7 +11,7 @@ public class Main {
 			System.out.println("java Main <level><algorithm>");
 			System.out.println("<level> : [1-9] & <algorithmNumber> : [1-3]");
 		}
-		if(Integer.parseInt(args[0]) == 0 || Integer.parseInt(args[0])>9){
+		if(Integer.parseInt(args[0]) == 0 || Integer.parseInt(args[0])>10){
 			System.out.println("Invalid Level");
 		}
 		if(Integer.parseInt(args[1]) == 0 || Integer.parseInt(args[1])>3){
