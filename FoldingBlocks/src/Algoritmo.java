@@ -77,7 +77,7 @@ public class Algoritmo {
 	}
 
 	private boolean solve(Node node){
-
+		// profundidade
 		if(this.algoritmoEscolhido == 1){
 
 			if(verifyFinalState(node.getBoard())){
@@ -93,6 +93,7 @@ public class Algoritmo {
 
 		}
 		
+		// greedy ou A*
 		else {
 				if(verifyFinalState(node.getBoard())){
 				this.solutionfound=true;
@@ -218,63 +219,7 @@ public class Algoritmo {
 
         return analyzeGreedyAstar(newNode);
 	}
-/*
-	public boolean analyzeAStar(Node a){
-		if(verifyFinalState(a.getBoard())){
-			this.solutionfound=true;
-			this.solution=a;
-			System.out.println("Used nodes: " +usedNodes.size());
-			getplays(a);
-			return true;
-		}
-		else {
-				addAStart(a);
-				return false;
-		 }
-	
-	}
 
-	public void addAStart(Node node){
-		
-		final int depth = node.getDepth();
-        final int cost = node.getCost();
-		int[][] calculatedBoard;
-	
-		for(int i=1; i<=this.numberPieces; i++){
-			for(int j=1; j<=4; j++){	
-				calculatedBoard = logic.fold(node.getBoard(), j, i);
-				if(!compareBoards(node.getBoard(), calculatedBoard)){
-					usedNodes.add(node);
-					unusedNodes.remove(node);
-					Node childNode = new Node (calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
-					if(!unusedNodes.contains(childNode) && !usedNodes.contains(childNode)){
-						unusedNodes.add(childNode);
-					}		
-				}
-			}
-		}
-
-		for(int i = unusedNodes.size()-1 ; i>= 0 ; i--){
-			if(heuristicaCost(unusedNodes.get(i)) <= this.value && heuristicaCost(unusedNodes.get(i)) >= 0){
-				this.value = heuristicaCost(unusedNodes.get(i));
-				this.saver = i;
-			}
-		}
-
-		if(depthLimiter(unusedNodes.get(this.saver)))return;
-		
-		if(this.counterAux == this.saver){
-			unusedNodes.remove(this.counterAux);
-			if(this.saver == this.unusedNodes.size()){
-				this.saver--;
-			}
-
-		}
-
-		this.counterAux = this.saver;
-		analyzeAStar(unusedNodes.get(this.saver));
-	}
-*/
 	public int heuristicaCost(Node node){
 		return heuristica(node) + node.getCost();
 	}
