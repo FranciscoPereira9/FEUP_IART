@@ -7,7 +7,8 @@ import javax.swing.JButton;
 import java.util.Collections;
 
 public class Algoritmo {
-
+	
+	private int [][] init_level_board;
 	private int[][] board;
 	private Logic logic = new Logic();
 	private int numberPieces;
@@ -18,15 +19,16 @@ public class Algoritmo {
 	static final int maxDepth = 20;
 	public boolean solutionfound=false;
 	public Node solution;
-	private boolean stuck = false;
-	private int counterAux = 0;
 	private int algoritmoEscolhido;
+	private int level;
 
 	public Algoritmo(int[][] board, int level, int numberPieces, int algoritmo) {
 		this.board = board;
 		this.numberPieces = numberPieces;
 		this.solution=null;
 		this.plays="";
+		this.init_level_board=board;
+		this.level=level;
 	    switch(algoritmo){
 	    	case 1:
 	    	/*
