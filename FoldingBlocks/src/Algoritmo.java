@@ -1,13 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JButton;
-import java.util.Collections;
 
 public class Algoritmo {
 
+	private int [][] init_level_board;
 	private int[][] board;
 	private Logic logic = new Logic();
 	private int numberPieces;
@@ -18,15 +17,16 @@ public class Algoritmo {
 	static final int maxDepth = 20;
 	public boolean solutionfound=false;
 	public Node solution;
-	private boolean stuck = false;
-	private int counterAux = 0;
 	private int algoritmoEscolhido;
+	private int level;
 
 	public Algoritmo(int[][] board, int level, int numberPieces, int algoritmo) {
+		this.init_level_board=board;
 		this.board = board;
 		this.numberPieces = numberPieces;
 		this.solution=null;
 		this.plays="";
+		this.level=level;
 	    switch(algoritmo){
 	    	case 1:
 	    	/*
@@ -35,7 +35,6 @@ public class Algoritmo {
 	 	    	this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
 				return n2.getCost() - n1.getCost();
 			});
-			
 	    	break;
 			case 2:
 			// caso seja greedy a fila é organizada da seguinte forma;
@@ -55,90 +54,13 @@ public class Algoritmo {
 		this.algoritmoEscolhido = algoritmo;
 		
 	}
-
+	
 	public boolean algoritmo1(){
 		Node parentNode = new Node(this.board, null, "", 0, 0);
+		
 		unusedNodes.add(parentNode);
-	    return solve(parentNode);
-	}
-	
-	public boolean solve(Node parentNode){
-		
-			if(this.algoritmoEscolhido==1){
-				checkwin(parentNode);
-				addChildNodes(parentNode);
-			}
-			
-			else{
-				if(iteratorNodes()) return true;
-			
-				createChilds(parentNode);
-			}
-		return false;
-	}
-	
-	public boolean checkwin(Node node){
-		if(verifyFinalState(node.getBoard())){
-			System.out.println("Game Won");
-			System.out.println("Used nodes: " + usedNodes.size());
-			this.solution=node;
-			this.solutionfound=true;
-			getplays(node);
-			return true;
-		}
-		
-		return false;
-	}
-	
-	public void createChilds(Node node){
-		final int depth = node.getDepth();
-        final int cost = node.getCost();
-		int[][] calculatedBoard;
-		
-		for(int i=1; i<=this.numberPieces; i++){
-			for(int j=1; j<=4; j++){
-					calculatedBoard = logic.fold(node.getBoard(), j, i);
-					if(!compareBoards(node.getBoard(), calculatedBoard)){
-						usedNodes.add(node);
-						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
-						if(!usedNodes.contains(childNode) && !unusedNodes.contains(childNode)){
-							unusedNodes.add(childNode);
-						}	
-					}	
-			}	
-		}
-	}
 
-	public boolean iteratorNodes(){
-		Node node;
-		while(unusedNodes.size()>=1){
-			node = unusedNodes.poll();
-			if(!checkwin(node)){
-				createChilds(node);
-			}
-			else return true;
-		}
-		return false;
-	}
-	
-	private void addChildNodes(Node node){
-		final int depth = node.getDepth();
-        final int cost = node.getCost();
-		int[][] calculatedBoard;
-		
-		for(int i=1; i<=this.numberPieces; i++){
-			for(int j=1; j<=4; j++){
-					calculatedBoard = logic.fold(node.getBoard(), j, i);
-					if(!compareBoards(node.getBoard(), calculatedBoard)){
-						usedNodes.add(node);
-						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
-						solve(childNode);
-						if(this.solutionfound) break;	
-					}
-					if(this.solutionfound) break;
-			}
-			if(this.solutionfound) break;
-		}
+	    return solve(parentNode);
 	}
 	
 	public boolean verifyFinalState(int[][]board){
@@ -149,7 +71,70 @@ public class Algoritmo {
 		} 
 		return true;
 	}
-	
+
+	private boolean solve(Node node){
+		// profundidade
+		if(this.algoritmoEscolhido == 1){
+
+			if(verifyFinalState(node.getBoard())){
+				this.solutionfound=true;
+				this.solution=node;
+				getplays(node);
+				return true;
+			}
+			else {
+				addChildNodes(node);
+				return false;
+			}
+
+		}
+
+		// greedy ou A*
+		else {
+				if(verifyFinalState(node.getBoard())){
+					this.solutionfound=true;
+					this.solution=node;
+					System.out.println("Game Won");
+					System.out.println("Used nodes: " + usedNodes.size());
+					getplays(node);
+					return true;
+				}
+			
+				addChildsGreedyAstar(node);
+		
+				Node newNode;
+
+				do{
+				
+					newNode = unusedNodes.poll();
+			
+	        		if(newNode == null)
+	           			return false;
+				}
+	        	while(newNode.getDepth() >= 20);
+
+	        return analyzeGreedyAstar(newNode);
+		}
+	}
+
+	private void addChildNodes(Node node){
+		final int depth = node.getDepth();
+        final int cost = node.getCost();
+		int[][] calculatedBoard;
+		
+		for(int i=1; i<=this.numberPieces; i++){
+			for(int j=1; j<=4; j++){
+					calculatedBoard = logic.fold(node.getBoard(), j, i);
+					if(!compareBoards(node.getBoard(), calculatedBoard)){
+						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
+						solve(childNode);
+						if(this.solutionfound) break;	
+					}
+					if(this.solutionfound) break;
+			}
+			if(this.solutionfound) break;
+		}
+	}
 
 	private boolean compareBoards(int[][] b1, int[][] b2){
 		if(b1.length != b2.length) return false;
@@ -172,14 +157,68 @@ public class Algoritmo {
 		}
 	}
 
-		/*
+	/*
 	iremos representar a heuristica como a distancia ao objetivo.
 		Ou seja, ter todo o tabuleiro preenchido
 	Numero total de espaços - Numero de espaços vazios.
 	*/
 
+
+	public void addChildsGreedyAstar(Node node){
+
+		final int depth = node.getDepth();
+        final int cost = node.getCost();
+		int[][] calculatedBoard;
+		
+		for(int i=1; i<=this.numberPieces; i++){
+			for(int j=1; j<=4; j++){	
+				calculatedBoard = logic.fold(node.getBoard(), j, i);
+				if(!compareBoards(node.getBoard(), calculatedBoard)){
+					usedNodes.add(node);
+				
+					Node childNode = new Node (calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
+					if(!unusedNodes.contains(childNode) && !usedNodes.contains(childNode)){
+						unusedNodes.add(childNode);
+					}
+					else {
+						System.out.println("already used");
+					}		
+				}
+			}
+		}
+
+	}
+
+	public boolean analyzeGreedyAstar(Node a){
+	
+		if(verifyFinalState(a.getBoard())){
+			this.solutionfound=true;
+			this.solution=a;
+			System.out.println("Game Won");
+			System.out.println("Used nodes: " + usedNodes.size());
+			getplays(a);
+			return true;
+		}
+		if(depthLimiter(a))return false;
+
+		addChildsGreedyAstar(a);	
+
+		Node newNode;
+
+		do{
+			
+			newNode = unusedNodes.poll();
+        	if(newNode == null)
+           		return false;
+	
+		}
+        while(newNode.getDepth() >=20);
+	
+		return analyzeGreedyAstar(newNode);	
+	}
+
 	public int heuristica(Node a){
-			return a.getNodeBoardSize() - (a.getNodeBoardSize() - a.getPlacedPieces());
+			return a.getPlacedPieces();
 	}
 
 
@@ -205,6 +244,72 @@ public class Algoritmo {
 		}
 		return false;
 	}
+
+	public int calculateMaxPiece(int block_ID){
+
+		int dist_i_ant=this.init_level_board.length;
+		int dist_j_ant=this.init_level_board[0].length;
+		int dist_i=0;
+		int dist_j=0;
+		System.out.println("Peca: "+ block_ID);
+		for(int i=0; i < this.init_level_board.length; i++){
+			for(int j=0; j < this.init_level_board[i].length; j++){
+				if(this.init_level_board[i][j] == block_ID){
+					dist_i=expand_vert(block_ID, i, j);
+					if (dist_i < dist_i_ant){
+						dist_i_ant=dist_i;
+					}
+					dist_j=expand_hor(block_ID, i, j);
+					if(dist_j < dist_j_ant){
+						dist_j_ant=dist_j;
+					}
+				}
+			}
+		}
+
+		return dist_i*dist_j;
+	}
+
+	public int expand_vert(int block_ID,int i,int j){
+		int dist=0;
+		//expandir para cima
+		for(int a=i; a>0;a--) {
+			if( (this.init_level_board[a][j] != 0) && (this.init_level_board[a][j] != block_ID)) {
+				dist=dist+1;
+			}	
+		}
+		//expandir para baixo
+		for(int a=i; a < this.init_level_board.length ;a++) {
+			if( (this.init_level_board[a][j] == 0) || (this.init_level_board[a][j] == block_ID)) {
+				dist=dist+1;
+			}
+			else break;
+		}
+		System.out.println("Distancia Vertical: "+ dist);
+		return dist+1;
+	}
+
+	public int expand_hor(int block_ID,int i,int j){
+		int dist=0;
+		//expandir para lado esquerdo
+		for(int a=j; a > 0;a--) {
+			if( (this.init_level_board[i][a] == 0) || (this.init_level_board[i][a] == block_ID)) {
+				dist=dist+1;
+			}	
+			else break;	
+		}
+		//expandir para lado direito
+		for(int a=j; a < this.init_level_board[i].length ;a++) {
+			if( (this.init_level_board[i][a] == 0) || (this.init_level_board[i][a] == block_ID)) {
+				dist=dist+1;
+			}	
+			else break;
+		}
+		System.out.println("Distancia Horzontal: "+ dist);
+		return dist+1;
+	}
+
+	
 
 	private class Node{
 

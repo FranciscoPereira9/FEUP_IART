@@ -9,12 +9,10 @@ public class Level extends JPanel{
 	private int[][] board;
 	private int board_sizeX;
 	private int board_sizeY;
-	private int counter;
 	
 	public Level(int num_level) {
 		this.num_level = num_level;
 		initializeLevel(this.num_level);
-		this.counter = 0;
 	}
 	
 	public void initializeLevel(int num_level) {
