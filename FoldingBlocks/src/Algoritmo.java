@@ -13,6 +13,7 @@ public class Algoritmo {
 	private int numberPieces;
 	public String plays = new String();
 	public int chosenPiece = 0;
+	private ArrayList<Integer> maxSizePieces;
 	private PriorityQueue<Node> unusedNodes;
 	private List<Node> usedNodes;
 	static final int maxDepth = 20;
@@ -26,6 +27,11 @@ public class Algoritmo {
 		this.solution=null;
 		this.plays="";
 		this.init_level_board=board;
+		this.maxSizePieces= new ArrayList<Integer>();
+		for(int i=1; i <=numberPieces; i++){
+			int aux=calculateMaxPiece(i);
+			maxSizePieces.add(aux);
+		}
 	    switch(algoritmo){
 	    	case 1:
 	    	/*
@@ -79,6 +85,7 @@ public class Algoritmo {
 	public boolean checkwin(Node node){
 		if(verifyFinalState(node.getBoard())){
 			System.out.println("Game Won");
+			System.out.println("Number of plays: "+ node.getDepth());
 			System.out.println("Used nodes: " + usedNodes.size());
 			this.solution=node;
 			this.solutionfound=true;
@@ -95,13 +102,11 @@ public class Algoritmo {
 		int[][] calculatedBoard;
 		
 		for(int i=1; i<=this.numberPieces; i++){
-			int size=calculateMaxPiece(i);
-			System.out.println("Maximo tamanho da peca "+i+": "+size);
 			for(int j=1; j<=4; j++){
 					calculatedBoard = logic.fold(node.getBoard(), j, i);
 					if(!compareBoards(node.getBoard(), calculatedBoard)){
 						usedNodes.add(node);
-						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1,size);
+						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1,maxSizePieces.get(i-1));
 						if(!usedNodes.contains(childNode) && !unusedNodes.contains(childNode)){
 							unusedNodes.add(childNode);
 						}	
@@ -207,28 +212,24 @@ public class Algoritmo {
 	}
 	
 	public int calculateMaxPiece(int block_ID){
-
-		int dist_i_ant=this.init_level_board.length;
-		int dist_j_ant=this.init_level_board[0].length;
-		int dist_i=0;
-		int dist_j=0;
+		int a1_ant=0;
+		int a2_ant=0;
+		int a1=0;
+		int a2=0;
 
 		for(int i=0; i < this.init_level_board.length; i++){
 			for(int j=0; j < this.init_level_board[i].length; j++){
 				if(this.init_level_board[i][j] == block_ID){
-					dist_i=expand_vert1(block_ID, i, j);
-					/*if (dist_i < dist_i_ant){
-						dist_i_ant=dist_i;
-					}
-					//dist_j=expand_hor(block_ID, i, j);
-					if(dist_j < dist_j_ant){
-						dist_j_ant=dist_j;
-					}*/
+					a1=expand_vert1(block_ID, i, j);
+					if(a1>a1_ant) a1_ant=a1;
+					a2=expand_hor2(block_ID, i, j);
+					if(a2>a2_ant) a2_ant=a2;
 				}
 			}
 		}
 
-		return dist_i;
+		if(a1_ant>a2_ant)return a1_ant;
+		else return a2_ant;
 	}
 
 	public int expand_vert1(int block_ID,int line,int col){
@@ -285,19 +286,37 @@ public class Algoritmo {
 
 	public int expand_hor1(int block_ID,int line,int col){
 		int dist=0;
+		int limit_left=0;
+		int limit_right=this.init_level_board[0].length-1;
 		//expandir para lado esquerdo
 		for(int a=col; a >= 0;a--) {
 			if( (this.init_level_board[line][a] == 0) || (this.init_level_board[line][a] == block_ID)) {
 				dist=dist+1;
+				limit_left=a;
 			}	
-			else break;	
+			else if ((this.init_level_board[line][a] != block_ID) && (this.init_level_board[line][a] != 0)) {
+				limit_left=a+1;
+				break;
+			}
+			else{
+				limit_left=a;
+				break;
+			} 
 		}
 		//expandir para lado direito
 		for(int b=col+1; b < this.init_level_board[line].length ;b++) {
 			if( (this.init_level_board[line][b] == 0) || (this.init_level_board[line][b] == block_ID)) {
 				dist=dist+1;
+				limit_right=b;
 			}	
-			else break;
+			else if ((this.init_level_board[line][b] != block_ID) && (this.init_level_board[line][b] != 0)) {
+				limit_right=b-1;
+				break;
+			}
+			else{
+				limit_right=b;
+				break;
+			} 
 		}
 
 		int c=0;
@@ -306,7 +325,99 @@ public class Algoritmo {
 
 		return dist;
 	}
+
+	public int expand_hor2(int block_ID,int line,int col){
+		int disth=0;
+		int limit_left=0;
+		int limit_right=this.init_level_board[0].length-1;;
+		//expandir para lado esquerdo
+		for(int a=col; a >= 0;a--) {
+			if( (this.init_level_board[line][a] == 0) || (this.init_level_board[line][a] == block_ID)) {
+				disth= disth + 1;
+				limit_left = a;
+			} else if ((this.init_level_board[line][a] != block_ID) && (this.init_level_board[line][a] != 0)) {
+				limit_left = a + 1;
+				break;
+			} else {
+				limit_left = a;
+				break;
+			}
+		}
+		// expandir para lado direito
+		for (int b = col + 1; b < this.init_level_board[line].length; b++) {
+			if ((this.init_level_board[line][b] == 0) || (this.init_level_board[line][b] == block_ID)) {
+				disth = disth + 1;
+				limit_right = b;
+			} else if ((this.init_level_board[line][b] != block_ID) && (this.init_level_board[line][b] != 0)) {
+				limit_right = b - 1;
+				break;
+			} else {
+				limit_right = b;
+				break;
+			}
+		}
+
+		int distv = 0;
+		int distv_ant = this.init_level_board.length;
+		for (int i = limit_left; i <= limit_right; i++) {
+			distv = expand_vert2(block_ID, line, i);
+			if (distv < distv_ant) {
+				distv_ant = distv;
+			}
+		}
+
+		int c = 0;
+		for (c = 0; Math.pow(2, c) <= disth; c++);
+		disth = (int) Math.pow(2, c - 1);
+
+		return disth*distv_ant;
+	}
+
+	public int expand_vert2(int block_ID,int line,int col){
+		int distv=0;
+		int limit_up=0;
+		int limit_down=this.init_level_board.length-1;
+
+		//expandir para cima
+		for(int a=line; a>=0;a--) {
+			if( (this.init_level_board[a][col] == 0) || (this.init_level_board[a][col] == block_ID)) {
+				distv=distv+1;
+				limit_up=a;
+			}	
+			else if ((this.init_level_board[a][col] != block_ID) && (this.init_level_board[a][col] != 0)) {
+				limit_up=a+1;
+				break;
+			}
+			else {
+				limit_up=a;
+				break;
+			}
+		}
+		//expandir para baixo
+		for(int b=line+1; b < this.init_level_board.length ;b++) {
+			if( (this.init_level_board[b][col] == 0) || (this.init_level_board[b][col] == block_ID)) {
+				distv=distv+1;
+				limit_down=b;
+			}
+			else if ((this.init_level_board[b][col] != block_ID) && (this.init_level_board[b][col] != 0)) {
+				limit_down=b-1;
+				break;
+			}
+			else{
+				limit_down=b;
+				break;
+			} 
+		}
+
+		int c=0;
+		for(c=0; Math.pow(2,c) <= distv; c++);
+		distv=(int) Math.pow(2, c-1);
 	
+		return distv;
+	}
+
+	
+
 	private class Node{
 
 		private int[][] board;
