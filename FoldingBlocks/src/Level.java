@@ -19,7 +19,7 @@ public class Level extends JPanel{
 		switch(num_level) {
 		case 1:
 			this.board=new int[4][4];
-			this.board[0][0] = 1;
+			this.board[1][1] = 1;
 			
 			break;
 			
@@ -213,7 +213,7 @@ public class Level extends JPanel{
 				numberPieces = 6;
 				break;
 			case 10:
-				numberPieces = 9;
+				numberPieces = 3;
 				break;
 		}
 		return numberPieces;

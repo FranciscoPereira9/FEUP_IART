@@ -1,10 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JButton;
-import java.util.Collections;
+import java.lang.Math;
 
 public class Algoritmo {
 	
@@ -20,7 +19,6 @@ public class Algoritmo {
 	public boolean solutionfound=false;
 	public Node solution;
 	private int algoritmoEscolhido;
-	private int level;
 
 	public Algoritmo(int[][] board, int level, int numberPieces, int algoritmo) {
 		this.board = board;
@@ -28,7 +26,6 @@ public class Algoritmo {
 		this.solution=null;
 		this.plays="";
 		this.init_level_board=board;
-		this.level=level;
 	    switch(algoritmo){
 	    	case 1:
 	    	/*
@@ -98,11 +95,13 @@ public class Algoritmo {
 		int[][] calculatedBoard;
 		
 		for(int i=1; i<=this.numberPieces; i++){
+			int size=calculateMaxPiece(i);
+			System.out.println("Maximo tamanho da peca "+i+": "+size);
 			for(int j=1; j<=4; j++){
 					calculatedBoard = logic.fold(node.getBoard(), j, i);
 					if(!compareBoards(node.getBoard(), calculatedBoard)){
 						usedNodes.add(node);
-						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
+						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1,size);
 						if(!usedNodes.contains(childNode) && !unusedNodes.contains(childNode)){
 							unusedNodes.add(childNode);
 						}	
@@ -180,12 +179,12 @@ public class Algoritmo {
 	*/
 
 	public int heuristica(Node a){
-			return a.getNodeBoardSize() - (a.getNodeBoardSize() - a.getPlacedPieces());
+			return a.getMaxPiece() + a.getPlacedPieces();
 	}
 
 
 	public int heuristicaCost(Node node){
-		return heuristica(node) + node.getCost();
+		return heuristica(node) - node.getCost();
 	}
 
 	public boolean depthLimiter(Node node){
@@ -213,63 +212,101 @@ public class Algoritmo {
 		int dist_j_ant=this.init_level_board[0].length;
 		int dist_i=0;
 		int dist_j=0;
-		System.out.println("Peca: "+ block_ID);
+
 		for(int i=0; i < this.init_level_board.length; i++){
 			for(int j=0; j < this.init_level_board[i].length; j++){
 				if(this.init_level_board[i][j] == block_ID){
-					dist_i=expand_vert(block_ID, i, j);
-					if (dist_i < dist_i_ant){
+					dist_i=expand_vert1(block_ID, i, j);
+					/*if (dist_i < dist_i_ant){
 						dist_i_ant=dist_i;
 					}
-					dist_j=expand_hor(block_ID, i, j);
+					//dist_j=expand_hor(block_ID, i, j);
 					if(dist_j < dist_j_ant){
 						dist_j_ant=dist_j;
-					}
+					}*/
 				}
 			}
 		}
 
-		return dist_i*dist_j;
+		return dist_i;
 	}
 
-	public int expand_vert(int block_ID,int i,int j){
-		int dist=0;
+	public int expand_vert1(int block_ID,int line,int col){
+		int distv=0;
+		int limit_up=0;
+		int limit_down=this.init_level_board.length-1;
+
 		//expandir para cima
-		for(int a=i; a>0;a--) {
-			if( (this.init_level_board[a][j] != 0) && (this.init_level_board[a][j] != block_ID)) {
-				dist=dist+1;
+		for(int a=line; a>=0;a--) {
+			if( (this.init_level_board[a][col] == 0) || (this.init_level_board[a][col] == block_ID)) {
+				distv=distv+1;
+				limit_up=a;
 			}	
+			else if ((this.init_level_board[a][col] != block_ID) && (this.init_level_board[a][col] != 0)) {
+				limit_up=a+1;
+				break;
+			}
+			else {
+				limit_up=a;
+				break;
+			}
 		}
 		//expandir para baixo
-		for(int a=i; a < this.init_level_board.length ;a++) {
-			if( (this.init_level_board[a][j] == 0) || (this.init_level_board[a][j] == block_ID)) {
-				dist=dist+1;
+		for(int b=line+1; b < this.init_level_board.length ;b++) {
+			if( (this.init_level_board[b][col] == 0) || (this.init_level_board[b][col] == block_ID)) {
+				distv=distv+1;
+				limit_down=b;
 			}
-			else break;
+			else if ((this.init_level_board[b][col] != block_ID) && (this.init_level_board[b][col] != 0)) {
+				limit_down=b-1;
+				break;
+			}
+			else{
+				limit_down=b;
+				break;
+			} 
 		}
-		System.out.println("Distancia Vertical: "+ dist);
-		return dist+1;
+
+		int disth=0;
+		int disth_ant=this.init_level_board[0].length;
+		for(int i=limit_up; i <= limit_down; i++){
+			disth=expand_hor1(block_ID, i, col);
+			if(disth < disth_ant){
+				disth_ant=disth;
+			}
+		}
+
+		int c=0;
+		for(c=0; Math.pow(2,c) <= distv; c++);
+		distv=(int) Math.pow(2, c-1);
+
+		return distv*disth_ant;
 	}
 
-	public int expand_hor(int block_ID,int i,int j){
+	public int expand_hor1(int block_ID,int line,int col){
 		int dist=0;
 		//expandir para lado esquerdo
-		for(int a=j; a > 0;a--) {
-			if( (this.init_level_board[i][a] == 0) || (this.init_level_board[i][a] == block_ID)) {
+		for(int a=col; a >= 0;a--) {
+			if( (this.init_level_board[line][a] == 0) || (this.init_level_board[line][a] == block_ID)) {
 				dist=dist+1;
 			}	
 			else break;	
 		}
 		//expandir para lado direito
-		for(int a=j; a < this.init_level_board[i].length ;a++) {
-			if( (this.init_level_board[i][a] == 0) || (this.init_level_board[i][a] == block_ID)) {
+		for(int b=col+1; b < this.init_level_board[line].length ;b++) {
+			if( (this.init_level_board[line][b] == 0) || (this.init_level_board[line][b] == block_ID)) {
 				dist=dist+1;
 			}	
 			else break;
 		}
-		System.out.println("Distancia Horzontal: "+ dist);
-		return dist+1;
+
+		int c=0;
+		for(c=0; Math.pow(2,c) <= dist; c++);
+		dist= (int) Math.pow(2, c-1);
+
+		return dist;
 	}
+	
 	private class Node{
 
 		private int[][] board;
@@ -277,6 +314,7 @@ public class Algoritmo {
 		private String operation;
 		private int depth;
 		private int cost;
+		private int maxPieceSize;
 
 		public Node(int[][] board, Node parentNode, String operation, int depth, int cost) {
             this.board = board;
@@ -284,6 +322,18 @@ public class Algoritmo {
             this.operation = operation;
             this.depth = depth;
 			this.cost = cost;
+			this.maxPieceSize=0;
+		}
+
+		
+
+		public Node(int[][] board, Node parentNode, String operation, int depth, int cost, int maxPieceSize) {
+            this.board = board;
+            this.parentNode = parentNode;
+            this.operation = operation;
+            this.depth = depth;
+			this.cost = cost;
+			this.maxPieceSize=maxPieceSize;
 		}
 		
 		public int[][] getBoard(){
@@ -311,10 +361,15 @@ public class Algoritmo {
 			}
 			return counter;
 		}
+		
+		public int getMaxPiece() {
+			return this.maxPieceSize;
+		}
 
 		public int getNodeBoardSize(){
 			return this.board.length * this.board[0].length;
 		}
+
 
 	}
 
