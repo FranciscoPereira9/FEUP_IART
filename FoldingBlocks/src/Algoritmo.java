@@ -45,7 +45,7 @@ public class Algoritmo {
 			case 2:
 			// caso seja greedy a fila é organizada da seguinte forma;
 			this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
-				return n2.getCost() - n1.getCost();
+				return heuristica(n2) - heuristica(n1);
 			});
 			break;
 			// caso seja Astar a fila é organizada da seguinte forma;
@@ -186,11 +186,14 @@ public class Algoritmo {
 	public int heuristica(Node a){
 			return a.getMaxPiece() + a.getPlacedPieces();
 	}
-
+	
+	public int heuristica2(Node node){
+		return node.getPlacedPieces();
+	}
 
 	public int heuristicaCost(Node node){
 		return heuristica(node) - node.getCost();
-	}
+	}	
 
 	public boolean depthLimiter(Node node){
 		if(node.getDepth()>=maxDepth){
