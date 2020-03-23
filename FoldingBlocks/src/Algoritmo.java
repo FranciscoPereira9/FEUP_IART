@@ -35,11 +35,12 @@ public class Algoritmo {
 		for(int i=1; i <=numberPieces; i++){
 			int aux=calculateMaxPiece(i);
 			maxSizePieces.add(aux);
+			System.out.println("Id: "+ i +"--- MaxSize: "+ aux);
 		}
 	    switch(algoritmo){
 	    	case 1:
 	    	/*
-	    		O algoritmo é o depth, onde a fila n vai ser usada, mas tem de ser inicializada na mesma.
+	    		O algoritmo é o Depth First Search, onde a fila n vai ser usada, mas tem de ser inicializada na mesma.
 	    	*/
 	 	    	this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
 				return n2.getCost() - n1.getCost();
@@ -72,15 +73,12 @@ public class Algoritmo {
 	}
 	
 	public boolean solve(Node parentNode){
-		
 			if(this.algoritmoEscolhido==1){
 				checkwin(parentNode);
 				addChildNodes(parentNode);
 			}
-			
 			else{
 				if(iteratorNodes()) return true;
-			
 				createChilds(parentNode);
 			}
 		return false;
@@ -106,12 +104,11 @@ public class Algoritmo {
 		final int depth = node.getDepth();
         final int cost = node.getCost();
 		int[][] calculatedBoard;
-		
+		usedNodes.add(node);
 		for(int i=1; i<=this.numberPieces; i++){
 			for(int j=1; j<=4; j++){
 					calculatedBoard = logic.fold(node.getBoard(), j, i);
 					if(!compareBoards(node.getBoard(), calculatedBoard)){
-						usedNodes.add(node);
 						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1,maxSizePieces.get(i-1));
 						if(!usedNodes.contains(childNode) && !unusedNodes.contains(childNode)){
 							unusedNodes.add(childNode);
@@ -137,12 +134,11 @@ public class Algoritmo {
 		final int depth = node.getDepth();
         final int cost = node.getCost();
 		int[][] calculatedBoard;
-		
+		usedNodes.add(node);
 		for(int i=1; i<=this.numberPieces; i++){
 			for(int j=1; j<=4; j++){
 					calculatedBoard = logic.fold(node.getBoard(), j, i);
 					if(!compareBoards(node.getBoard(), calculatedBoard)){
-						usedNodes.add(node);
 						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1);
 						solve(childNode);
 						if(this.solutionfound) break;	
@@ -480,7 +476,7 @@ public class Algoritmo {
 			int counter = 0;
 			for(int i=0; i<this.board.length; i++){
 				for(int j=0; j<this.board[0].length; j++){
-					if(this.board[i][j] != 0 )counter++;
+					if(this.board[i][j] != 0 ) counter++;
 				}
 			}
 			return counter;

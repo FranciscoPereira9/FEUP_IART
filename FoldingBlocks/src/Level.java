@@ -105,16 +105,7 @@ public class Level extends JPanel{
 			this.board[9][8] = 3;
 			this.board[9][0] = 4;
 			this.board[7][2] = 5;
-		case 12:
-			this.board=new int[10][10];
-			this.board[0][0] = 1;
-			this.board[0][9] = 2;
-			this.board[9][9] = 3;
-			this.board[9][0] = 4;
-			this.board[3][5] = 5;
-			this.board[4][3] = 5;
-			this.board[5][4] = 5;
-			this.board[3][6] = 5;
+		
 		}
 		
 		
@@ -184,6 +175,7 @@ public class Level extends JPanel{
 	public int getLevel_sizeY() {
 		return board_sizeY;
 	}
+	
 	public int getLevel_sizeX() {
 		return board_sizeX;
 	}
@@ -195,6 +187,7 @@ public class Level extends JPanel{
 	public int getBoardSize(){
 		return this.board_sizeX * this.board_sizeY;
 	}
+
 	public void update_board(int[][] mat){
 		this.board=mat;
 	}
