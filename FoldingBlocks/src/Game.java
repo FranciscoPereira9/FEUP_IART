@@ -228,14 +228,11 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void makeAIplay(int[][] board) throws AWTException{
-		System.out.println(playsID.size());
-		System.out.println(playsMove.size());
+		
 		if(playsID.size() == playsMove.size() && ai_i < playsMove.size()){
 			
 			board=this.l.get_board();
-			System.out.println("Jogada: "+playsMove.get(this.ai_i)+" ID da peça: "+playsID.get(this.ai_i));
 			board=this.functional.fold(board, playsMove.get(this.ai_i), playsID.get(this.ai_i));
-			this.functional.print2D(board);
 			this.l.update_board(board);
 			try {
 				Thread.sleep(500);

@@ -35,7 +35,6 @@ public class Algoritmo {
 		for(int i=1; i <=numberPieces; i++){
 			int aux=calculateMaxPiece(i);
 			maxSizePieces.add(aux);
-			System.out.println("Id: "+ i +"--- MaxSize: "+ aux);
 		}
 	    switch(algoritmo){
 	    	case 1:
@@ -87,10 +86,11 @@ public class Algoritmo {
 	public boolean checkwin(Node node){
 		if(verifyFinalState(node.getBoard())){
 			timeFinish = System.currentTimeMillis();
-			System.out.println("Game Won");
-			System.out.println("Number of plays: "+ node.getDepth());
-			System.out.println("Used nodes: " + usedNodes.size());
-			System.out.println("Time used: " + (timeFinish - timeStart) + "ms");
+			System.out.println();
+			System.out.println("The algorithm managed to finish the game:");
+			System.out.println(" - Number of plays: "+ node.getDepth());
+			System.out.println(" - Used nodes: " + usedNodes.size());
+			System.out.println(" - Time used: " + (timeFinish - timeStart) + "ms");
 			this.solution=node;
 			this.solutionfound=true;
 			getplays(node);
