@@ -44,14 +44,15 @@ public class Algoritmo {
 	 	    	this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
 				return n2.getCost() - n1.getCost();
 			});
-			
 	    	break;
+			
 			case 2:
 			// caso seja greedy a fila é organizada da seguinte forma;
 			this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
 				return heuristica2(n2) - heuristica2(n1);
 			});
 			break;
+			
 			// caso seja Astar a fila é organizada da seguinte forma;
 			case 3:
 				this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
@@ -64,18 +65,29 @@ public class Algoritmo {
 		this.algoritmoEscolhido = algoritmo;
 		
 	}
-
+	
+	/*
+		Cria o 1º no. O no Pai, que vai ser adicionado a priorityqueue, para ser explorado.
+	*/
 	public boolean algoritmo1(){
 		Node parentNode = new Node(this.board, null, "", 0, 0);
 		unusedNodes.add(parentNode);
 	    return solve(parentNode);
 	}
 	
+	/*
+		Resolve o problema conforme o pedido do utilizador.
+		1- o algoritmo escolhido foi o Depth First
+		2- o algoritmo escolhido foi o Greedy
+		3- o algoritmo escolhido foi o A*
+	*/
 	public boolean solve(Node parentNode){
+			/*Verifica se o no ja se encontra no estado final. Caso nao se verifique, criam-se os filhos*/
 			if(this.algoritmoEscolhido==1){
 				checkwin(parentNode);
 				addChildNodes(parentNode);
 			}
+			/*Vai a fila de prioridade buscar o primeiro elemento, verifica se esta no estado final, caso nao se verifique cria os filhos*/
 			else{
 				if(iteratorNodes()) return true;
 				createChilds(parentNode);
@@ -83,6 +95,9 @@ public class Algoritmo {
 		return false;
 	}
 	
+	/*
+		verifica se o no se encontra no estado final.
+	*/
 	public boolean checkwin(Node node){
 		if(verifyFinalState(node.getBoard())){
 			timeFinish = System.currentTimeMillis();
@@ -100,6 +115,7 @@ public class Algoritmo {
 		return false;
 	}
 	
+	/*Cria os filhos do no e adiciona as respetivas lista e fila*/
 	public void createChilds(Node node){
 		final int depth = node.getDepth();
         final int cost = node.getCost();
@@ -117,7 +133,10 @@ public class Algoritmo {
 			}	
 		}
 	}
-
+	
+	/*itera sobre a fila de prioridade ate criando os filhos e avaliando os nos que vao sendo colocados na primeira posiçao
+	ate encontrar soluçao
+	*/
 	public boolean iteratorNodes(){
 		Node node;
 		while(unusedNodes.size()>=1){
@@ -130,6 +149,7 @@ public class Algoritmo {
 		return false;
 	}
 	
+	/*Utilizado para o DFS. Responsavel por criar os filhos e analizar o no criado. percorrendo a arvore em profundidade ate encontrar a soluçao*/
 	private void addChildNodes(Node node){
 		final int depth = node.getDepth();
         final int cost = node.getCost();
@@ -149,6 +169,7 @@ public class Algoritmo {
 		}
 	}
 	
+	/*Verifica se o tabuleiro esta no estado final*/
 	public boolean verifyFinalState(int[][]board){
 		for (int i=0; i<board.length; i++){
 			for(int j=0;j<board[0].length; j++){
@@ -158,7 +179,7 @@ public class Algoritmo {
 		return true;
 	}
 	
-
+	/*Compara dois tabuleiros*/
 	private boolean compareBoards(int[][] b1, int[][] b2){
 		if(b1.length != b2.length) return false;
 		if(b1[0].length != b2[0].length) return false;
@@ -170,7 +191,7 @@ public class Algoritmo {
 		}
 		return true;
 	}
-
+	/*Responsavel por ir buscar aos nos as respetivas operaçoes.*/
 	public void getplays(Node solution){
 		if(solution.parentNode != null){
 			getplays(solution.parentNode);
@@ -179,12 +200,9 @@ public class Algoritmo {
 			plays=plays+solution.operation;
 		}
 	}
-		/*
-	iremos representar a heuristica como a distancia ao objetivo.
-		Ou seja, ter todo o tabuleiro preenchido
-	Numero total de espaços - Numero de espaços vazios.
-	*/
-
+	
+	
+	/*Declaraçao de duas heuristicas a ser utilizadas nas filas de prioridade - greedy*/
 	public int heuristica1(Node a){
 		return a.getPlacedPieces();
 	}
@@ -192,7 +210,7 @@ public class Algoritmo {
 	public int heuristica2(Node node){
 		return node.getMaxPiece() + node.getPlacedPieces();
 	}
-
+	/*representa a heuristica combinada com o custo - A* */
 	public int heuristicaCost1(Node node){
 		return heuristica1(node) - node.getCost();
 	}	
@@ -200,7 +218,10 @@ public class Algoritmo {
 	public int heuristicaCost2(Node node){
 		return heuristica2(node) - node.getCost();
 	}	
-
+	
+	/*Limitador de profundidade. 
+	N~ao esta a ser utilizado
+	*/
 	public boolean depthLimiter(Node node){
 		if(node.getDepth()>=maxDepth){
 			System.out.println("ERROR: Depth reached limit value");
