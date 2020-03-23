@@ -20,6 +20,8 @@ public class Algoritmo {
 	public boolean solutionfound=false;
 	public Node solution;
 	private int algoritmoEscolhido;
+	private long timeStart;
+	private long timeFinish;
 
 	public Algoritmo(int[][] board, int level, int numberPieces, int algoritmo) {
 		this.board = board;
@@ -28,6 +30,8 @@ public class Algoritmo {
 		this.plays="";
 		this.init_level_board=board;
 		this.maxSizePieces= new ArrayList<Integer>();
+		this.timeStart = System.currentTimeMillis();
+
 		for(int i=1; i <=numberPieces; i++){
 			int aux=calculateMaxPiece(i);
 			maxSizePieces.add(aux);
@@ -45,13 +49,13 @@ public class Algoritmo {
 			case 2:
 			// caso seja greedy a fila é organizada da seguinte forma;
 			this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
-				return heuristica(n2) - heuristica(n1);
+				return heuristica2(n2) - heuristica2(n1);
 			});
 			break;
 			// caso seja Astar a fila é organizada da seguinte forma;
 			case 3:
 				this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
-				return heuristicaCost(n2) - heuristicaCost(n1);
+				return heuristicaCost2(n2) - heuristicaCost2(n1);
 			});
 			break;
 		}
@@ -84,9 +88,11 @@ public class Algoritmo {
 	
 	public boolean checkwin(Node node){
 		if(verifyFinalState(node.getBoard())){
+			timeFinish = System.currentTimeMillis();
 			System.out.println("Game Won");
 			System.out.println("Number of plays: "+ node.getDepth());
 			System.out.println("Used nodes: " + usedNodes.size());
+			System.out.println("Time used: " + (timeFinish - timeStart) + "ms");
 			this.solution=node;
 			this.solutionfound=true;
 			getplays(node);
@@ -183,16 +189,20 @@ public class Algoritmo {
 	Numero total de espaços - Numero de espaços vazios.
 	*/
 
-	public int heuristica(Node a){
-			return a.getMaxPiece() + a.getPlacedPieces();
+	public int heuristica1(Node a){
+		return a.getPlacedPieces();
 	}
 	
 	public int heuristica2(Node node){
-		return node.getPlacedPieces();
+		return node.getMaxPiece() + node.getPlacedPieces();
 	}
 
-	public int heuristicaCost(Node node){
-		return heuristica(node) - node.getCost();
+	public int heuristicaCost1(Node node){
+		return heuristica1(node) - node.getCost();
+	}	
+
+	public int heuristicaCost2(Node node){
+		return heuristica2(node) - node.getCost();
 	}	
 
 	public boolean depthLimiter(Node node){
