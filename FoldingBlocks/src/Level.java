@@ -227,11 +227,9 @@ public class Level extends JPanel{
 				numberPieces = 3;
 				break;
 			case 11:
-				numberPieces = 5;
-				break;
-			case 12:
 				numberPieces = 9;
 				break;
+			
 
 		}
 		return numberPieces;

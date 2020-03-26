@@ -4,6 +4,7 @@ import java.util.PriorityQueue;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.lang.Math;
+import java.util.*;
 
 public class Algoritmo {
 	
@@ -22,6 +23,7 @@ public class Algoritmo {
 	private int algoritmoEscolhido;
 	private long timeStart;
 	private long timeFinish;
+	public int counter=0;
 
 	public Algoritmo(int[][] board, int level, int numberPieces, int algoritmo) {
 		this.board = board;
@@ -51,12 +53,15 @@ public class Algoritmo {
 			this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
 				return heuristica2(n2) - heuristica2(n1);
 			});
-			break;
-			// caso seja Astar a fila é organizada da seguinte forma;
 			case 3:
+			// caso seja Astar a fila é organizada da seguinte forma;
 				this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
 				return heuristicaCost2(n2) - heuristicaCost2(n1);
 			});
+			break;
+			case 4:
+			// caso seja greedy a fila é organizada da seguinte forma;
+			this.unusedNodes = new PriorityQueue<>((new NodeComparator()));
 			break;
 		}
 	
@@ -109,7 +114,7 @@ public class Algoritmo {
 			for(int j=1; j<=4; j++){
 					calculatedBoard = logic.fold(node.getBoard(), j, i);
 					if(!compareBoards(node.getBoard(), calculatedBoard)){
-						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1,maxSizePieces.get(i-1));
+						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1,maxSizePieces.get(i-1),heuristica3(node));
 						if(!usedNodes.contains(childNode) && !unusedNodes.contains(childNode)){
 							unusedNodes.add(childNode);
 						}	
@@ -121,7 +126,9 @@ public class Algoritmo {
 	public boolean iteratorNodes(){
 		Node node;
 		while(unusedNodes.size()>=1){
+			counter++;
 			node = unusedNodes.poll();
+			//System.out.printf("Node: "+counter+" Value: %.4f \n",node.nodeValue);
 			if(!checkwin(node)){
 				createChilds(node);
 			}
@@ -191,6 +198,10 @@ public class Algoritmo {
 	
 	public int heuristica2(Node node){
 		return node.getMaxPiece() + node.getPlacedPieces();
+	}
+
+	public double heuristica3(Node node){
+		return log2((double)node.getNodeBoardSize()/(double)node.getPlacedPieces())*this.numberPieces;
 	}
 
 	public int heuristicaCost1(Node node){
@@ -425,7 +436,9 @@ public class Algoritmo {
 		return distv;
 	}
 
-	
+	public static double log2(double x) {
+    	return (Math.log(x) / Math.log(2));
+	}
 
 	private class Node{
 
@@ -435,6 +448,7 @@ public class Algoritmo {
 		private int depth;
 		private int cost;
 		private int maxPieceSize;
+		private double nodeValue;
 
 		public Node(int[][] board, Node parentNode, String operation, int depth, int cost) {
             this.board = board;
@@ -443,17 +457,19 @@ public class Algoritmo {
             this.depth = depth;
 			this.cost = cost;
 			this.maxPieceSize=0;
+			this.nodeValue=0;
 		}
 
 		
 
-		public Node(int[][] board, Node parentNode, String operation, int depth, int cost, int maxPieceSize) {
+		public Node(int[][] board, Node parentNode, String operation, int depth, int cost, int maxPieceSize, double heur) {
             this.board = board;
             this.parentNode = parentNode;
             this.operation = operation;
             this.depth = depth;
 			this.cost = cost;
 			this.maxPieceSize=maxPieceSize;
+			this.nodeValue= heur;
 		}
 		
 		public int[][] getBoard(){
@@ -490,7 +506,23 @@ public class Algoritmo {
 			return this.board.length * this.board[0].length;
 		}
 
+		/**
+		 * @return the nodeValue
+		 */
+		public double getNodeValue() {
+			return this.nodeValue;
+		}
+
 
 	}
 
+	class NodeComparator implements Comparator<Node>{ 
+              
+		// Overriding compare()method of Comparator  
+		// for descending order of node.value
+		public int compare(Node n1, Node n2) { 
+			return (int) (n1.getNodeValue() - n2.getNodeValue());
+		}
+	}
+	
 } 

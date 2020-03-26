@@ -9,12 +9,12 @@ public class Main {
 		if(args.length != 2){
 			System.out.println("Usage");
 			System.out.println("java Main <level><algorithm>");
-			System.out.println("<level> : [1-12] & <algorithmNumber> : [1-3]");
+			System.out.println("<level> : [1-12] & <algorithmNumber> : [1-4]");
 		}
 		if(Integer.parseInt(args[0]) == 0 || Integer.parseInt(args[0])>12){
 			System.out.println("Invalid Level");
 		}
-		if(Integer.parseInt(args[1]) == 0 || Integer.parseInt(args[1])>3){
+		if(Integer.parseInt(args[1]) == 0 || Integer.parseInt(args[1])>4){
 			System.out.println("Invalid Algorithm");
 		}
 		JFrame obj = new JFrame();
