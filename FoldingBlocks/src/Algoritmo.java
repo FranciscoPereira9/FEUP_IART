@@ -49,22 +49,36 @@ public class Algoritmo {
 	    	break;
 			
 			case 2:
-			// caso seja greedy a fila é organizada da seguinte forma;
+			// caso seja greedy a fila é organizada seguindo a heuristica 1;
+			this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
+				return heuristica1(n2) - heuristica1(n1);
+			});
+			break;
+
+			case 3:
+			// caso seja greedy a fila é organizada seguindo a heuristica 2;
 			this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
 				return heuristica2(n2) - heuristica2(n1);
 			});
 			break;
-			
-			// caso seja Astar a fila é organizada da seguinte forma;
-			case 3:
-			// caso seja Astar a fila é organizada da seguinte forma;
-				this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
-				return heuristicaCost2(n2) - heuristicaCost2(n1);
-			});
-			break;
+
 			case 4:
-			// caso seja greedy a fila é organizada da seguinte forma;
+			// caso seja greedy a fila é organizada seguindo a heuristica 3;
 			this.unusedNodes = new PriorityQueue<>((new NodeComparator()));
+			break;
+			
+			case 5:
+			// caso seja Astar a fila é organizada seguindo a heuristica 1;
+				this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
+					return heuristicaCost1(n2) - heuristicaCost1(n1);
+				});
+			break;
+
+			case 6:
+			// caso seja Astar a fila é organizada seguindo a heuristica 2;
+				this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
+					return heuristicaCost2(n2) - heuristicaCost2(n1);
+				});
 			break;
 		}
 	

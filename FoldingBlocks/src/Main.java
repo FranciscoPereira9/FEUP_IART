@@ -13,9 +13,11 @@ public class Main {
 		}
 		if(Integer.parseInt(args[0]) == 0 || Integer.parseInt(args[0])>12){
 			System.out.println("Invalid Level");
+			return;
 		}
-		if(Integer.parseInt(args[1]) == 0 || Integer.parseInt(args[1])>4){
+		if(Integer.parseInt(args[1]) == 0 || Integer.parseInt(args[1])>6){
 			System.out.println("Invalid Algorithm");
+			return;
 		}
 		JFrame obj = new JFrame();
 		obj.setBounds(10, 10, 800, 700);
