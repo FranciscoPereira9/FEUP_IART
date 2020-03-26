@@ -36,10 +36,16 @@ public class Level extends JPanel{
 			break;
 			
 		case 4:
-			this.board=new int[8][8];
+			this.board = new int [3][6];
 			this.board[0][0] = 1;
-			this.board[7][7] = 2;
-			this.board[7][0] = 3;
+			this.board[2][0] = 4;
+			this.board[0][3] = 2;
+			this.board[1][2] = 2;
+			this.board[2][3] = 2;
+			this.board[0][5] = 3;
+			this.board[1][4] = 3;
+			this.board[2][5] = 3;
+			
 			break;
 			
 		case 5:
@@ -59,11 +65,10 @@ public class Level extends JPanel{
 			break;
 			
 		case 7:
-			this.board = new int [10][8];
-			this.board[1][3] = 1;
-			this.board[9][7] = 2;
-			this.board[7][7] = 3;
-			this.board[1][4] = 4;
+			this.board=new int[8][8];
+			this.board[0][0] = 1;
+			this.board[7][7] = 2;
+			this.board[7][0] = 3;
 			break;
 
 		case 8:
@@ -81,15 +86,11 @@ public class Level extends JPanel{
 			break;
 	
 		case 9:
-			this.board = new int [3][6];
-			this.board[0][0] = 1;
-			this.board[2][0] = 4;
-			this.board[0][3] = 2;
-			this.board[1][2] = 2;
-			this.board[2][3] = 2;
-			this.board[0][5] = 3;
-			this.board[1][4] = 3;
-			this.board[2][5] = 3;
+			this.board = new int [10][8];
+			this.board[1][3] = 1;
+			this.board[9][7] = 2;
+			this.board[7][7] = 3;
+			this.board[1][4] = 4;
 			break;
 		case 10:
 			this.board=new int[8][8];
@@ -206,7 +207,7 @@ public class Level extends JPanel{
 				numberPieces=1;
 				break;
 			case 4:
-				numberPieces=3;
+				numberPieces=6;
 				break;
 			case 5:
 				numberPieces=3;
@@ -215,13 +216,13 @@ public class Level extends JPanel{
 				numberPieces=3;
 				break;
 			case 7:
-				numberPieces=4;
+				numberPieces=3;
 				break;
 			case 8:
 				numberPieces=4;
 				break;
 			case 9:
-				numberPieces = 6;
+				numberPieces = 4;
 				break;
 			case 10:
 				numberPieces = 3;
