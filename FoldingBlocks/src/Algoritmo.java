@@ -37,7 +37,10 @@ public class Algoritmo {
 		for(int i=1; i <=numberPieces; i++){
 			int aux=calculateMaxPiece(i);
 			maxSizePieces.add(aux);
+			//System.out.println("Peça: "+i+" Tamanho max: "+maxSizePieces.get(i-1));
 		}
+		
+
 	    switch(algoritmo){
 	    	case 1:
 	    	/*
@@ -46,7 +49,7 @@ public class Algoritmo {
 	 	    	this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
 				return n2.getCost() - n1.getCost();
 			});
-	    	break;
+	    	break;																					
 			
 			case 2:
 			// caso seja greedy a fila é organizada seguindo a heuristica 1;
@@ -146,7 +149,7 @@ public class Algoritmo {
 			for(int j=1; j<=4; j++){
 					calculatedBoard = logic.fold(node.getBoard(), j, i);
 					if(!compareBoards(node.getBoard(), calculatedBoard)){
-						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1,maxSizePieces.get(i-1),heuristica3(node));
+						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1,maxSizePieces.get(i-1),heuristica33(node));
 						if(!usedNodes.contains(childNode) && !unusedNodes.contains(childNode)){
 							unusedNodes.add(childNode);
 						}	
@@ -163,7 +166,7 @@ public class Algoritmo {
 		while(unusedNodes.size()>=1){
 			counter++;
 			node = unusedNodes.poll();
-			//System.out.printf("Node: "+counter+" Value: %.4f \n",node.nodeValue);
+			System.out.printf("Node: "+counter+" Value: %.4f \n",node.nodeValue);
 			if(!checkwin(node)){
 				createChilds(node);
 			}
@@ -234,9 +237,19 @@ public class Algoritmo {
 		return node.getMaxPiece() + node.getPlacedPieces();
 	}
 
+	/* Heurística que estima a distância de jogadas até ao fim partindo do pressuposto que todas
+		peças vão ocupar no estado final o mesmo espaço.
+	* Heurística não optimista.
+	*/
 	public double heuristica3(Node node){
 		return log2((double)node.getNodeBoardSize()/(double)node.getPlacedPieces())*this.numberPieces;
 	}
+
+	public double heuristica33(Node node){
+		return log2((double)node.getNodeBoardSize()/(double)node.getPlacedPieces());
+	}
+
+
 
 	/*representa a heuristica combinada com o custo - A* */
 	public int heuristicaCost1(Node node){
@@ -248,7 +261,7 @@ public class Algoritmo {
 	}	
 	
 	/*Limitador de profundidade. 
-	N~ao esta a ser utilizado
+	* Não esta a ser utilizado.
 	*/
 	public boolean depthLimiter(Node node){
 		if(node.getDepth()>=maxDepth){
@@ -551,6 +564,10 @@ public class Algoritmo {
 			return this.nodeValue;
 		}
 
+		public double getNodeHeuristicPlusCost() {
+			return this.nodeValue + this.cost;
+		}
+
 
 	}
 
@@ -559,7 +576,7 @@ public class Algoritmo {
 		// Overriding compare()method of Comparator  
 		// for descending order of node.value
 		public int compare(Node n1, Node n2) { 
-			return (int) (n1.getNodeValue() - n2.getNodeValue());
+			return (int) (n1.getNodeHeuristicPlusCost() - n2.getNodeHeuristicPlusCost());
 		}
 	}
 	
