@@ -107,6 +107,7 @@ public class Level extends JPanel{
 			this.board[9][8] = 3;
 			this.board[9][0] = 4;
 			this.board[7][2] = 5;
+			break;
 
 		/*case 12:
 			this.board=new int[2][6];
@@ -210,10 +211,10 @@ public class Level extends JPanel{
 				numberPieces=2;
 				break;
 			case 3:
-				numberPieces=1;
+				numberPieces=3;
 				break;
 			case 4:
-				numberPieces=6;
+				numberPieces=4;
 				break;
 			case 5:
 				numberPieces=3;

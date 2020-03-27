@@ -33,11 +33,11 @@ public class Algoritmo {
 		this.init_level_board=board;
 		this.maxSizePieces= new ArrayList<Integer>();
 		this.timeStart = System.currentTimeMillis();
+		//System.out.println(this.timeStart);
 
 		for(int i=1; i <=numberPieces; i++){
 			int aux=calculateMaxPiece(i);
 			maxSizePieces.add(aux);
-			//System.out.println("Peça: "+i+" Tamanho max: "+maxSizePieces.get(i-1));
 		}
 		
 
@@ -52,7 +52,7 @@ public class Algoritmo {
 	    	break;																					
 			
 			case 2:
-			// caso seja greedy a fila é organizada seguindo a heuristica 1;
+			// caso seja greedy a fila é organizada seguindo a heuristica 2;
 			this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
 				return heuristica2(n2) - heuristica2(n1);
 			});
@@ -64,7 +64,7 @@ public class Algoritmo {
 			break;
 
 			case 4:
-			// caso seja greedy a fila é organizada seguindo a heuristica 3;
+			// caso seja A* a fila é organizada seguindo a heuristica 4;
 			this.unusedNodes = new PriorityQueue<>((new NodeComparatorA()));
 			break;
 
@@ -116,6 +116,7 @@ public class Algoritmo {
 	public boolean checkwin(Node node){
 		if(verifyFinalState(node.getBoard())){
 			timeFinish = System.currentTimeMillis();
+			//System.out.println(timeFinish);
 			System.out.println();
 			System.out.println("The algorithm managed to finish the game:");
 			System.out.println(" - Number of plays: "+ node.getDepth());
