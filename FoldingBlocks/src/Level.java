@@ -30,9 +30,10 @@ public class Level extends JPanel{
 			break;
 			
 		case 3:
-			this.board=new int[4][8];
+			this.board=new int[4][5];
 			this.board[0][0] = 1;
-			this.board[0][1] = 1;
+			this.board[0][4] = 2;
+			this.board[3][0] = 3;
 			break;
 			
 		case 4:

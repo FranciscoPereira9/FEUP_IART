@@ -54,33 +54,24 @@ public class Algoritmo {
 			case 2:
 			// caso seja greedy a fila é organizada seguindo a heuristica 1;
 			this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
-				return heuristica1(n2) - heuristica1(n1);
-			});
-			break;
-
-			case 3:
-			// caso seja greedy a fila é organizada seguindo a heuristica 2;
-			this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
 				return heuristica2(n2) - heuristica2(n1);
 			});
 			break;
 
-			case 4:
+			case 3:
 			// caso seja greedy a fila é organizada seguindo a heuristica 3;
-			this.unusedNodes = new PriorityQueue<>((new NodeComparator()));
-			break;
-			
-			case 5:
-			// caso seja Astar a fila é organizada seguindo a heuristica 1;
-				this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
-					return heuristicaCost1(n2) - heuristicaCost1(n1);
-				});
+			this.unusedNodes = new PriorityQueue<>((new NodeComparatorG()));
 			break;
 
-			case 6:
-			// caso seja Astar a fila é organizada seguindo a heuristica 2;
+			case 4:
+			// caso seja greedy a fila é organizada seguindo a heuristica 3;
+			this.unusedNodes = new PriorityQueue<>((new NodeComparatorA()));
+			break;
+
+			case 5:
+			// heurística adaptada ao problema em concreto de forma a encontrar solução otima e mais rápido que o A*;
 				this.unusedNodes = new PriorityQueue<>((Node n1, Node n2) -> {
-					return heuristicaCost2(n2) - heuristicaCost2(n1);
+					return heuristicaCost5(n2) - heuristicaCost5(n1);
 				});
 			break;
 		}
@@ -148,8 +139,8 @@ public class Algoritmo {
 		for(int i=1; i<=this.numberPieces; i++){
 			for(int j=1; j<=4; j++){
 					calculatedBoard = logic.fold(node.getBoard(), j, i);
-					if(!compareBoards(node.getBoard(), calculatedBoard)){
-						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1,maxSizePieces.get(i-1),heuristica33(node));
+					if(!compareBoards(node.getBoard(), calculatedBoard)){						
+						Node childNode = new Node(calculatedBoard, node, j+","+ i + "|",depth+1 ,cost+1,maxSizePieces.get(i-1));
 						if(!usedNodes.contains(childNode) && !unusedNodes.contains(childNode)){
 							unusedNodes.add(childNode);
 						}	
@@ -166,7 +157,6 @@ public class Algoritmo {
 		while(unusedNodes.size()>=1){
 			counter++;
 			node = unusedNodes.poll();
-			System.out.printf("Node: "+counter+" Value: %.4f \n",node.nodeValue);
 			if(!checkwin(node)){
 				createChilds(node);
 			}
@@ -217,6 +207,7 @@ public class Algoritmo {
 		}
 		return true;
 	}
+
 	/*Responsavel por ir buscar aos nos as respetivas operaçoes.*/
 	public void getplays(Node solution){
 		if(solution.parentNode != null){
@@ -229,12 +220,8 @@ public class Algoritmo {
 	
 	
 	/*Declaraçao de duas heuristicas a ser utilizadas nas filas de prioridade - greedy*/
-	public int heuristica1(Node a){
+	public int heuristica2(Node a){
 		return a.getPlacedPieces();
-	}
-	
-	public int heuristica2(Node node){
-		return node.getMaxPiece() + node.getPlacedPieces();
 	}
 
 	/* Heurística que estima a distância de jogadas até ao fim partindo do pressuposto que todas
@@ -245,23 +232,27 @@ public class Algoritmo {
 		return log2((double)node.getNodeBoardSize()/(double)node.getPlacedPieces())*this.numberPieces;
 	}
 
-	public double heuristica33(Node node){
+	/* 
+	* Heurística que estima a distância de jogadas até ao fim de for otimista.
+	*/
+	public double heuristica4(Node node){
 		return log2((double)node.getNodeBoardSize()/(double)node.getPlacedPieces());
 	}
+	
+	public double heuristicaCost4(Node node){
+		return heuristica4(node) + node.getCost();
+	}
 
+	public int heuristica5(Node node){
+		return node.getMaxPiece() + node.getPlacedPieces();
+	}
 
-
-	/*representa a heuristica combinada com o custo - A* */
-	public int heuristicaCost1(Node node){
-		return heuristica1(node) - node.getCost();
-	}	
-
-	public int heuristicaCost2(Node node){
-		return heuristica2(node) - node.getCost();
+	public int heuristicaCost5(Node node){
+		return heuristica5(node) - node.getCost();
 	}	
 	
 	/*Limitador de profundidade. 
-	* Não esta a ser utilizado.
+	* Não esta a ser utilizado pois não faz sentido aplicar ao problema.
 	*/
 	public boolean depthLimiter(Node node){
 		if(node.getDepth()>=maxDepth){
@@ -499,7 +490,6 @@ public class Algoritmo {
 		private int depth;
 		private int cost;
 		private int maxPieceSize;
-		private double nodeValue;
 
 		public Node(int[][] board, Node parentNode, String operation, int depth, int cost) {
             this.board = board;
@@ -508,19 +498,17 @@ public class Algoritmo {
             this.depth = depth;
 			this.cost = cost;
 			this.maxPieceSize=0;
-			this.nodeValue=0;
 		}
 
 		
 
-		public Node(int[][] board, Node parentNode, String operation, int depth, int cost, int maxPieceSize, double heur) {
+		public Node(int[][] board, Node parentNode, String operation, int depth, int cost, int maxPieceSize) {
             this.board = board;
             this.parentNode = parentNode;
             this.operation = operation;
             this.depth = depth;
 			this.cost = cost;
 			this.maxPieceSize=maxPieceSize;
-			this.nodeValue= heur;
 		}
 		
 		public int[][] getBoard(){
@@ -557,27 +545,24 @@ public class Algoritmo {
 			return this.board.length * this.board[0].length;
 		}
 
-		/**
-		 * @return the nodeValue
-		 */
-		public double getNodeValue() {
-			return this.nodeValue;
-		}
-
-		public double getNodeHeuristicPlusCost() {
-			return this.nodeValue + this.cost;
-		}
-
-
 	}
 
-	class NodeComparator implements Comparator<Node>{ 
+	class NodeComparatorG implements Comparator<Node>{ 
               
 		// Overriding compare()method of Comparator  
 		// for descending order of node.value
 		public int compare(Node n1, Node n2) { 
-			return (int) (n1.getNodeHeuristicPlusCost() - n2.getNodeHeuristicPlusCost());
+			return (int) (heuristica3(n1) - heuristica3(n2));
 		}
+	}
+
+	class NodeComparatorA implements Comparator<Node>{ 
+              
+			// Overriding compare()method of Comparator  
+			// for descending order of node.value
+			public int compare(Node n1, Node n2) { 
+				return (int) (heuristicaCost4(n1) - heuristicaCost4(n2));
+			}
 	}
 	
 } 
