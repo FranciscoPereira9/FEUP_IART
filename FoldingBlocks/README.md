@@ -1,34 +1,35 @@
 # Folding Blocks
 
-## Compilation instructions:
+## Instruções de Compilação:
 
-To compile, run the following command from the src folder:
+Para compilar, na pasta "src" correr o seguinte comando:
 
     javac *.java
 
 ### Note: 
 
-Javac is required to compile. The system's version can be viewed by running the command:
+Javac é necessário para compilar. Para observar a versão do javac pode-se executar o seguinte comando:
 
     javac -version
 
-Where the expected output should be something alike to:
+O resultado deveria ser algo como o seguinte:
 
     javac 11.0.6
 
-Note : Should use Command Prompt or PowerShell as it uses JFRAME.
+Nota : Uma vez que a aplicação usa JFRAME, o codigo deve ser executado em GIT BASH, Linha de Comandos ou Windows PowerShell.
 
-## Execution instructions:
+## Instruções de Execução:
 
-To execute the program, run the command from the src folder:
+Para executar a aplicação, deve ser corrigo um comando com a seguinte estrutura:
 
     java Application <Level> <Algorithm>
 
-where:
+Onde:
 
-- Level - range 1-11.
-- Algorithm - range 1-6 : DFS, Greedy heuritic1, Greedy heuristic2, Greedy heuristic3, A* heuristic1, A* heuristic2.
+- Level - intervalo 1-11.
+- Algorithm - intervalo 1-5 : DFS, Greedy heuritic2, Greedy heuristic3, A*, Nosso Algoritmo.
 
+If the algorithm finds a solution, press *SPACE BAR* to watch the AI solve the game
 ## Autores:
 *****
 * Bernardo Moreira - up201604014
