@@ -11,8 +11,6 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-//import sun.awt.AWTAccessor.KeyEventAccessor;
-
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
@@ -258,5 +256,4 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 
 
 	}
-
 }

@@ -233,21 +233,28 @@ public class Algoritmo {
 		return log2((double)node.getNodeBoardSize()/(double)node.getPlacedPieces())*this.numberPieces;
 	}
 
-	/* 
-	* Heurística que estima a distância de jogadas até ao fim de for otimista.
+	/*  Heurística que estima a distância de jogadas até ao fim de for otimista.
 	*/
 	public double heuristica4(Node node){
 		return log2((double)node.getNodeBoardSize()/(double)node.getPlacedPieces());
 	}
 	
+	/*  Função de avaliação do algoritmo A* somando à heuristica4() o custo de cada nó. 
+	*/
 	public double heuristicaCost4(Node node){
 		return heuristica4(node) + node.getCost();
 	}
 
+	/*Heurística que dá ao nó o valor da máxima peça e soma o número de peças existentes. 
+	* Esta função pretende dar prioridade à exploração das peças que podem ter um maior tamanho final e por
+	* consequência completar o jogo em menos jogadas.
+	 */
 	public int heuristica5(Node node){
 		return node.getMaxPiece() + node.getPlacedPieces();
 	}
-
+	/* À heurística criada tiramos o custo equivalente ao número de jogadas realizadas até esse nó,
+	* dando vantagens aos nós que tiveram menos jogadas até então. 
+	*/
 	public int heuristicaCost5(Node node){
 		return heuristica5(node) - node.getCost();
 	}	
@@ -273,7 +280,14 @@ public class Algoritmo {
 		}
 		return false;
 	}
-	
+
+	/* Função para cálculo do tamanho máximo que a peça pode atingir. Faz uso das funções:
+	* expand_vert1()
+	* expand_hor1()
+	* expand_hor2()
+	* expand_vert2()
+	* Estas funções tentam estimar o tamnho máximo da peça "expandindo-a" na vertical e horizontal 
+	*/
 	public int calculateMaxPiece(int block_ID){
 		int a1_ant=0;
 		int a2_ant=0;
@@ -479,10 +493,16 @@ public class Algoritmo {
 		return distv;
 	}
 
+	/*
+	* Função que permite a operação logarítmica de base 2.
+	*/
 	public static double log2(double x) {
     	return (Math.log(x) / Math.log(2));
 	}
 
+	/*
+	* Classe Node.  Estrutura utilizada para juntamente com as Priority Queues manter registo dos nós não utilizados e os utilizados.
+	 */
 	private class Node{
 
 		private int[][] board;
@@ -548,6 +568,10 @@ public class Algoritmo {
 
 	}
 
+	/*
+	* Comparadores para as priority queues.
+	*/
+	
 	class NodeComparatorG implements Comparator<Node>{ 
               
 		// Overriding compare()method of Comparator  
