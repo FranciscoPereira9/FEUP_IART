@@ -29,7 +29,7 @@ Onde:
 - Level - intervalo 1-11.
 - Algorithm - intervalo 1-5 : DFS, Greedy heuristic2, Greedy heuristic3, A*, Nosso Algoritmo.
 
-Se o algoritmo encontrar uma solução, pressionando *SPACE BAR* podemos ver a IA a resolver o jogo
+Se o algoritmo encontrar uma solução, pressionando *SPACE BAR* podemos ver a IA a resolver o jogo.
 
 ## Autores:
 *****
