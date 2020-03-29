@@ -87,6 +87,9 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
+	/*
+	* Começar o temporizador após ser detetada ação.
+	*/
 	@Override
 	public void actionPerformed(final ActionEvent arg0) {
 		timer.start();
@@ -94,6 +97,9 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		repaint();
 	}
 
+	/*
+	 * Identificar a pressão de teclas e agir conforme o significado destas.
+	 */
 	@Override
 	public void keyPressed(final KeyEvent e) {
 		
@@ -151,6 +157,9 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 			this.ID_block = 9;
 		}
 		
+		/*
+		* Caso seja premido o tecla espaço, então dá início à jogada que foi resolvida pelo algoritmo.
+		*/
 		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
 			this.ai=true;
 		}
@@ -203,6 +212,9 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 	public void keyTyped(final KeyEvent arg0) {
 	}
 
+	/*
+	*Função para clonar um array para uma variável.
+	*/
 	public static int[][] cloneArray(final int[][] src) {
 		final int length = src.length;
 		final int[][] target = new int[length][src[0].length];
@@ -212,6 +224,9 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		return target;
 	}
 
+	/*
+	*Passar as jogadas de formato string para inteiros e colocálas em ArrayList com posição respetiva à jogada a ser feita.
+	*/
 	public void interpretPlays(final String plays){
 		int j=0;
 		for(int i=0; i < plays.length(); i++){
@@ -225,6 +240,9 @@ public class Game extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
+	/*
+	* Fazer movimentos gerados pelo algoritmo de pesquisa.
+	*/
 	public void makeAIplay(int[][] board) throws AWTException{
 		
 		if(playsID.size() == playsMove.size() && ai_i < playsMove.size()){
