@@ -27,9 +27,10 @@ Para executar a aplicação, deve ser corrigo um comando com a seguinte estrutur
 Onde:
 
 - Level - intervalo 1-11.
-- Algorithm - intervalo 1-5 : DFS, Greedy heuritic2, Greedy heuristic3, A*, Nosso Algoritmo.
+- Algorithm - intervalo 1-5 : DFS, Greedy heuristic2, Greedy heuristic3, A*, Nosso Algoritmo.
 
-If the algorithm finds a solution, press *SPACE BAR* to watch the AI solve the game
+Se o algoritmo encontrar uma solução, pressionando *SPACE BAR* podemos ver a IA a resolver o jogo.
+
 ## Autores:
 *****
 * Bernardo Moreira - up201604014
