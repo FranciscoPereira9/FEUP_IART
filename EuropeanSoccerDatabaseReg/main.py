@@ -3,150 +3,145 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.linear_model import LinearRegression
-
-# Create your connection
-
 #Database Has : Country, League, Match, Player, Player_Attributes, Team_attributes, Team
-
 #Select League from database
+
+#**********************************************************
+#CODE USED TO DATA PROCESSING :
+# CREATING A NEW DATAFRAME 
+## STARTS HERE:
 team = pd.read_csv("Team.csv")
 team_attributes = pd.read_csv("Team_attributes.csv")
 match = pd.read_csv("Match.csv")
 player = pd.read_csv("Player.csv")
 player_attributes = pd.read_csv("Player_attributes.csv")
-match_to_keep = ["id", "league_id", "home_team_api_id", "away_team_api_id", "home_team_goal",
-                 "away_team_goal", "home_player_1", "home_player_2", "home_player_3", "home_player_4", "home_player_5",
-                 "home_player_6", "home_player_7", "home_player_8", "home_player_9", "home_player_10", "home_player_11",
-                 "away_player_1", "away_player_2", "away_player_3", "away_player_4", "away_player_5", "away_player_6",
-                 "away_player_7", "away_player_8", "away_player_9", "away_player_10", "away_player_11"]
 
-def analyseHomePlayer(row, number):
+match_depth = match.shape[0]
+
+def analyseDifGoals(row, index):
+
+    return match["home_team_goal"].tolist()[index] - match["away_team_goal"].tolist()[index]
+
+
+def analyseHomePlayer(row, number, index):
     new = player["player_api_id"].isin([row["home_player_"+"%s" % number]])
     new2 = player_attributes["player_api_id"].isin(
         [row["home_player_"+"%s" % number]])
-    #print("This -> ", row["home_player_"+"%s" % number], " is this Player :  ", player[new]
-        #['player_name'].tolist()[0], "with overall_rating: ", player_attributes[new2]['overall_rating'].tolist()[0])
-    return player_attributes[new2]['overall_rating'].tolist()[0]
-    
-def analyseAwayPlayer(row, number):
+
+    return player_attributes[new2]['overall_rating'].tolist()[index]
+
+def analyseAwayPlayer(row, number, index):
     new = player["player_api_id"].isin([row["away_player_"+"%s" % number]])
     new2 = player_attributes["player_api_id"].isin(
         [row["away_player_"+"%s" % number]])
-    #print("This -> ", row["away_player_"+"%s" % number], " is this Player :  ", player[new]
-    #      ['player_name'].tolist()[0], "with overall_rating: ", player_attributes[new2]['overall_rating'].tolist()[0])
-    return player_attributes[new2]['overall_rating'].tolist()[0]
 
-def analyseHomePlayers(row):
+    return player_attributes[new2]['overall_rating'].tolist()[index]
+
+
+def analyseHomePlayers(row, index):
     sum = 0
-    for index in range(1, 12):
-       sum += analyseHomePlayer(row, index)
+    for i in range(1, 12):
+       sum += analyseHomePlayer(row, i, index)
     return sum
-    
+
+
 def analyseAwayPlayers(row):
-    sum=0
-    for index in range(1, 12):
-        sum += analyseAwayPlayer(row, index)
+    sum = 0
+    for i in range(1, 12):
+        sum += analyseAwayPlayer(row, i, index)
     return sum
+
 
 def analyseHomePlayersHeight(row):
     sum = 0
-    for index in range(1, 12):
-       new = player["player_api_id"].isin([row["home_player_"+"%s" % index]])
+    for i in range(1, 12):
+       new = player["player_api_id"].isin([row["home_player_"+"%s" % i]])
        sum += player[new]["height"].tolist()[0]
-    return round(sum/11,1)
+    return round(sum/11, 1)
+
 
 def analyseAwayPlayersHeight(row):
     sum = 0
-    for index in range(1, 12):
-       new = player["player_api_id"].isin([row["away_player_"+"%s" % index]])
+    for i in range(1, 12):
+       new = player["player_api_id"].isin([row["away_player_"+"%s" % i]])
        sum += player[new]["height"].tolist()[0]
-    return round(sum/11,1)
+    return round(sum/11, 1)
+
 
 def analyseHomePlayersWeight(row):
     sum = 0
-    for index in range(1, 12):
-       new = player["player_api_id"].isin([row["home_player_"+"%s" % index]])
+    for i in range(1, 12):
+       new = player["player_api_id"].isin([row["home_player_"+"%s" % i]])
        sum += player[new]["weight"].tolist()[0]
-    return round(sum/11,1)
+    return round(sum/11, 1)
+
 
 def analyseAwayPlayersWeight(row):
     sum = 0
-    for index in range(1, 12):
-       new = player["player_api_id"].isin([row["away_player_"+"%s" % index]])
+    for i in range(1, 12):
+       new = player["player_api_id"].isin([row["away_player_"+"%s" % i]])
        sum += player[new]["weight"].tolist()[0]
-    return round(sum/11,1)
+    return round(sum/11, 1)
 
-def analyseTeamRates(row):
-      print("\n\n************ HOME TEAM ************")
-      analyseHomeTeamRates(row)
-      print("\n\n************ AWAY TEAM ************")
-      analyseAwayTeamRates(row)
-      print("\n\n************ Average ODS ************")
-      print("Home Team Wins: ", analyseTeamOdd(row,"H"), "\t Draw: ", analyseTeamOdd(row,"D"), "\t Away Team Wins: ",analyseTeamOdd(row,"A"))
-
-def analyseTeamOdd(row, string):
+def analyseTeamOdd(row, string, index):
     #10 websites
-    sum=0
-    sum+=match["B365"+"%s" %string].tolist()[0]
-    sum+=match["BW"+"%s" %string].tolist()[0]
-    sum+=match["IW"+"%s" %string].tolist()[0]
-    sum+=match["LB"+"%s" %string].tolist()[0]
-    sum+=match["PS"+"%s" %string].tolist()[0]
-    sum+=match["WH"+"%s" %string].tolist()[0]
-    sum+=match["SJ"+"%s" %string].tolist()[0]
-    sum+=match["VC"+"%s" %string].tolist()[0]
-    sum+=match["GB"+"%s" %string].tolist()[0]
-    sum+=match["BS"+"%s" %string].tolist()[0]
+    sum = 0
+    sum += match["B365"+"%s" % string].tolist()[index]
+    sum += match["BW"+"%s" % string].tolist()[index]
+    sum += match["IW"+"%s" % string].tolist()[index]
+    sum += match["LB"+"%s" % string].tolist()[index]
+    sum += match["PS"+"%s" % string].tolist()[index]
+    sum += match["WH"+"%s" % string].tolist()[index]
+    sum += match["SJ"+"%s" % string].tolist()[index]
+    sum += match["VC"+"%s" % string].tolist()[index]
+    sum += match["GB"+"%s" % string].tolist()[index]
+    sum += match["BS"+"%s" % string].tolist()[index]
     return round(sum/10, 2)
 
-
-def analyseHomeTeamRates(row):
-    
-    print("Players Average Overall Rating : ", round(analyseHomePlayers(match[match_to_keep].iloc[0])/11, 1),"\n")
-    new = team_attributes["team_api_id"].isin([row["home_team_api_id"]])
+def analyseOffenseRates(row,index,string):
+    new = team_attributes["team_api_id"].isin([row["%s" %string]])
     passing = team_attributes[new]["chanceCreationPassing"].tolist()[0]
     crossing = team_attributes[new]["chanceCreationCrossing"].tolist()[0]
     shooting = team_attributes[new]["chanceCreationShooting"].tolist()[0]
-    print("Passing: ", passing, "\tCrossing: ", crossing, "\tShooting", shooting)
-    print("---- Average Offense Rates: ", round((passing+shooting+crossing)/3,1), "----\n")
+    return round((passing+shooting+crossing)/3, 1)
+
+def analyseCenterRates(row,index,string):
+    new = team_attributes["team_api_id"].isin([row["%s" % string]])
     dribling = team_attributes[new]["buildUpPlayDribbling"].tolist()[0]
     BUpassing = team_attributes[new]["buildUpPlayPassing"].tolist()[0]
     speed = team_attributes[new]["buildUpPlaySpeed"].tolist()[0]
-    print("Dribling: ", dribling, "\tBuild Up Passing: ", BUpassing, "\tSpeed", speed)
-    print("---- Average Center Rates: ", round((dribling+BUpassing+speed)/3,1), "----\n")
-    Agression = team_attributes[new]["defenceAggression"].tolist()[0]
+    return round((dribling+BUpassing+speed)/3, 1)
+
+def analyseDefenceRates(row,index,string):
+    new = team_attributes["team_api_id"].isin([row["%s" % string]])
+    agression = team_attributes[new]["defenceAggression"].tolist()[0]
     width = team_attributes[new]["defenceTeamWidth"].tolist()[0]
     pressure = team_attributes[new]["defencePressure"].tolist()[0]
-    print("Aggression: ", dribling, "\t Width: ", width, "\tPressure", pressure)
-    print("---- Average Defence Rates: ", round((dribling+width+pressure)/3,1), "----\n")
-    print("Average Players Height: ", analyseHomePlayersHeight(row))
-    print("Average Players Weight: ", analyseHomePlayersWeight(row))
+    return round((agression+width+pressure)/3, 1)
 
-def analyseAwayTeamRates(row):
-    print("Average Players Overall Rating : ", round(analyseAwayPlayers(match[match_to_keep].iloc[0])/11, 1), "\n")
-    new = team_attributes["team_api_id"].isin([row["away_team_api_id"]])
-    passing = team_attributes[new]["chanceCreationPassing"].tolist()[0]
-    crossing = team_attributes[new]["chanceCreationCrossing"].tolist()[0]
-    shooting = team_attributes[new]["chanceCreationShooting"].tolist()[0]
-    print("Passing: ", passing, "\tCrossing: ", crossing, "\tShooting", shooting)   
-    print("---- Average Offense Rates: ", round((passing+shooting+crossing)/3,1), "----\n")  
-    dribling = team_attributes[new]["buildUpPlayDribbling"].tolist()[0]
-    BUpassing = team_attributes[new]["buildUpPlayPassing"].tolist()[0]
-    speed = team_attributes[new]["buildUpPlaySpeed"].tolist()[0]
-    print("Dribling: ", dribling, "\tBuild Up Passing: ", BUpassing, "\tSpeed", speed)
-    print("---- Average Center Rates: ", round((dribling+BUpassing+speed)/3,1), "----\n")
-    Aggression = team_attributes[new]["defenceAggression"].tolist()[0]
-    width = team_attributes[new]["defenceTeamWidth"].tolist()[0]
-    pressure = team_attributes[new]["defencePressure"].tolist()[0]
-    print("Aggression: ", dribling, "\t Width: ", width, "\tPressure", pressure)
-    print("---- Average Defence Rates: ", round((dribling+width+pressure)/3,1), "----\n")
-    print("Average Players Height: ", analyseAwayPlayersHeight(row))
-    print("Average Players Weight: ", analyseAwayPlayersWeight(row))
- 
+new = team_attributes["team_api_id"].isin([match.iloc[0]["home_team_api_id"]])
+new_dataset = []
+for index in range(0, match_depth):
+    new_dataset.append((index,match["home_team_api_id"].iloc[index], match["away_team_api_id"].iloc[index], analyseDifGoals(match.iloc[index], index),
+        analyseOffenseRates(match.iloc[index],index, "home_team_api_id"),
+        analyseCenterRates(match.iloc[index],index, "home_team_api_id"),
+        analyseDefenceRates(match.iloc[index],index, "home_team_api_id"),
+        analyseOffenseRates(match.iloc[index],index, "away_team_api_id"),
+        analyseCenterRates(match.iloc[index],index, "away_team_api_id"),
+        analyseDefenceRates(match.iloc[index],index, "away_team_api_id"),
+        analyseHomePlayersHeight(match.iloc[index]), analyseHomePlayersWeight(match.iloc[index]), 
+        analyseAwayPlayersHeight(match.iloc[index]), analyseAwayPlayersWeight(match.iloc[index]), 
+        analyseTeamOdd(match.iloc[index], "H", index),analyseTeamOdd(match.iloc[index], "D", index),analyseTeamOdd(match.iloc[index], "A", index)))
 
-analyseTeamRates(match[match_to_keep].iloc[0])
-
-
+new_dataframe = pd.DataFrame(new_dataset, columns=['id','home_team_api_id', 'away_team_api_id', 'dif_goals',                                                
+                                                   'home_team_offense_rates','home_team_center_rates','home_team_defense_rates',
+                                                   'away_team_offense_rates','away_team_center_rates','away_team_defense_rates',
+                                                   'home_team_average_height', 'home_team_average_weight',
+                                                   'away_team_average_height', 'away_team_average_weight',
+                                                   'average_home_odd', 'average_draw_odd','average_away_odd'])
+new_dataframe.to_csv("file2.csv")
+## ENDS HERE
+#**********************************************************
 '''
 
 #following the scikit-learn tutorial
