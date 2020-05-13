@@ -142,7 +142,35 @@ new_dataframe = pd.DataFrame(new_dataset, columns=['id','home_team_api_id', 'awa
 new_dataframe.to_csv("file2.csv")
 ## ENDS HERE
 #**********************************************************
+
 '''
+#Used on jupyter Notebook 
+fl = pd.read_csv("file2.csv")
+team = pd.read_csv("team.csv")
+team['streak'] = 0
+display(team)
+fl['home_streak']=0
+fl['away_streak']=0
+
+for i, row in fl.iterrows():
+    h = team["team_api_id"] == row["home_team_api_id"]
+    a = team["team_api_id"] == row["away_team_api_id"]
+    indexh = team[h].index[0]
+    indexa = team[a].index[0]
+    fl.at[i,"home_streak"] = team.at[indexh, "streak"]
+    fl.at[i,"away_streak"] = team.at[indexa, "streak"]
+    if row["dif_goals"] > 0 :
+        team.at[indexh, "streak"] += 1
+        team.at[indexa, "streak"] = 0
+    elif row["dif_goals"] < 0:
+        team.at[indexh, "streak"] = 0
+        team.at[indexa, "streak"] += 1
+    elif row["dif_goals"] == 0:
+        team.at[indexh, "streak"] = 0
+        team.at[indexa, "streak"] = 0
+#till here
+
+
 
 #following the scikit-learn tutorial
 
