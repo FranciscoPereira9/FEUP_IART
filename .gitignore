@@ -37,3 +37,5 @@ hs_err_pid*
 EuropeanSoccerDatabaseReg/OriginalDatabase/database.sqlite
 
 *.csv
+
+EuropeanSoccerDatabaseReg/OriginalDatabase/pre_processed_df
