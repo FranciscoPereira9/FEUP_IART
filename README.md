@@ -1,5 +1,5 @@
 # FEUP_IART
-[Projeto 1 - Folding Blocks](https://github.com/BernardoCMoreira/FEUP_IART#projeto-1-folding-blocks)
+[Projeto 1 - Folding Blocks](https://github.com/FranciscoPereira9/FEUP_IART/tree/master/FoldingBlocks#projeto-1-folding-blocks)
 ## Autores:
 *****
 * Bernardo Moreira - up201604014
